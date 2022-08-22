@@ -20,8 +20,12 @@
             <hr class="sidebar-divider my-0" />
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+            <li class="nav-item">
+                <a
+                    class="nav-link"
+                    href="#"
+                    @click.prevent="$router.push({ name: 'admin.dashboard' })"
+                >
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a
                 >
@@ -31,7 +35,7 @@
             <hr class="sidebar-divider" />
 
             <!-- Heading -->
-            <div class="sidebar-heading">Interface</div>
+            <div class="sidebar-heading">Master Data</div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
@@ -39,23 +43,34 @@
                     class="nav-link collapsed"
                     href="#"
                     data-toggle="collapse"
-                    data-target="#collapseTwo"
+                    data-target="#collapseUser"
                     aria-expanded="true"
-                    aria-controls="collapseTwo"
+                    aria-controls="collapseUser"
                 >
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                    <i class="fas fa-users"></i>
+                    <span>User</span>
                 </a>
                 <div
-                    id="collapseTwo"
+                    id="collapseUser"
                     class="collapse"
-                    aria-labelledby="headingTwo"
+                    aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar"
                 >
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <h6 class="collapse-header">Manajemen User</h6>
+                        <a
+                            class="collapse-item"
+                            href="#"
+                            @click.prevent="
+                                $router.push({ name: 'users.index' })
+                            "
+                            >User</a
+                        >
+                        <a
+                            class="collapse-item"
+                            href="#"
+                            >Role</a
+                        >
                     </div>
                 </div>
             </li>

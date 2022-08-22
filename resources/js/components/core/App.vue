@@ -6,12 +6,8 @@
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
                     <navbar></navbar>
-                    <div class="container-fluid">
-                        <div class="card">
-                            <div class="card-body">
-                                <el-input placeholder="Please input" v-model="input"></el-input>
-                            </div>
-                        </div>
+                    <div class="container">
+                        <router-view></router-view>
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import ElementUI  from "element-ui";
 import locale from "element-ui/lib/locale/lang/en";
 import Vue from "vue";
 import App from "./components/core/App";
+import routes from "./routes";
 
 window.axios = require("axios");
 
@@ -40,6 +41,7 @@ if (userApiToken) {
 }
 
 
+require("./mixins.js");
 require("./components.js");
 
 Vue.use(ElementUI, { locale });
@@ -68,5 +70,22 @@ Vue.prototype.$csrfToken = token;
  */
 const app = new Vue({
     el: "#app",
+    router: routes,
     render: (h) => h(App),
+    methods: {
+        splashScreen() {
+            return this.$loading({
+                lock: true,
+                text: "Loading",
+                spinner: "el-icon-loading",
+                background: "rgba(0, 0, 0, 0.7)",
+            });
+        }
+    },
+    created() {
+        this.splashScreen();
+    },
+    mounted() {
+        this.splashScreen().close();
+    }
 });

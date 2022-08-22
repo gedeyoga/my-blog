@@ -7,14 +7,10 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="api-token" content="">
+    <meta name="api-token" content="{{ Auth::user()->getAuthToken() }}">
     <meta name="base-url" content="{{ url('/') }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
-    <script src="{{ asset(mix('js/app-vendor.js')) }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -29,6 +25,16 @@
     </div>
 
     @routes
+
+    <script>
+        window.admin_panel = {
+            user: {!! $user !!},
+        };
+    </script>
+
+    <!-- Scripts -->
+    <script src="{{ asset(mix('js/app.js')) }}" defer></script>
+    <script src="{{ asset(mix('js/app-vendor.js')) }}" defer></script>
 </body>
 
 </html>
