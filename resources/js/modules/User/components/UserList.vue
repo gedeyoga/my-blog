@@ -17,11 +17,56 @@
                 class="card-header d-flex justify-content-between align-items-center"
             >
                 <span>List User</span>
-                <el-button type="primary" size="small" icon="fas fa-plus"
-                    >Tambah</el-button
+                <el-button
+                    type="primary"
+                    size="small"
+                    icon="fas fa-plus"
+                    @click="$router.push({ name: 'users.create' })"
+                    >Tambah User</el-button
                 >
             </div>
             <div class="card-body">
+                <div class="row mb-3 align-items-end">
+                    <div class="col-md-3">
+                        <span class="filter-text">Filter Role</span>
+                        <el-select
+                            clearable
+                            size="small"
+                            v-model="filter.role"
+                            placeholder="Pilih Role"
+                        >
+                            <el-option
+                                v-for="role in list_roles"
+                                :key="role.id"
+                                :label="role.name"
+                                :value="role.name"
+                            >
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="col-md-9">
+                        <div
+                            class="btn-group float-right"
+                        >
+                            <el-input
+                                size="mini"
+                                prefix-icon="el-icon-search"
+                                @keyup.enter.native="fetchData"
+                                v-model="filter.search"
+                                :placeholder="'Cari..'"
+                            >
+                                <template slot="append">
+                                    <el-button @click="fetchData">
+                                        <span class="fa fa-search"></span>
+                                    </el-button>
+                                </template>
+                            </el-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-bottom"></div>
+
                 <el-table
                     :data="data"
                     stripe
@@ -31,38 +76,55 @@
                 >
                     <el-table-column prop="full_name" label="Nama">
                         <template slot-scope="scope">
-                            <a @click.prevent="goToEdit(scope)" href="#">
-                                {{ scope.row.full_name }}
-                            </a>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="phone" label="Telepon">
-                        <template slot-scope="scope">
-                            <a @click.prevent="goToEdit(scope)" href="#">
-                                {{ scope.row.phone }}
+                            <a
+                                @click.prevent="
+                                    $router.push({
+                                        name: 'users.edit',
+                                        params: {
+                                            user: scope.row.id,
+                                        },
+                                    })
+                                "
+                                href="#"
+                            >
+                                {{ scope.row.name }}
                             </a>
                         </template>
                     </el-table-column>
                     <el-table-column prop="email" label="Email">
                         <template slot-scope="scope">
-                            <a @click.prevent="goToEdit(scope)" href="#">
-                                {{ scope.row.email }}
-                            </a>
+                            {{ scope.row.email }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="role" label="Role">
+                        <template slot-scope="scope">
+                            {{ scope.row.roles[0].name }}
                         </template>
                     </el-table-column>
                     <el-table-column prop="actions" label="Aksi">
                         <template slot-scope="scope">
                             <el-button-group>
-                                <edit-button
-                                    :to="{
-                                        name: 'admin.user.users.edit',
-                                        params: { userId: scope.row.id },
-                                    }"
-                                ></edit-button>
-                                <delete-button
-                                    :scope="scope"
-                                    :rows="data"
-                                ></delete-button>
+                                <el-button
+                                    type="primary"
+                                    size="small"
+                                    icon="el-icon-edit"
+                                    @click="
+                                        $router.push({
+                                            name: 'users.edit',
+                                            params: {
+                                                user: scope.row.id,
+                                            },
+                                        })
+                                    "
+                                ></el-button>
+                                <el-button
+                                    size="small"
+                                    type="danger"
+                                    plain
+                                    icon="el-icon-delete"
+                                    v-if="user.id != scope.row.id"
+                                    @click="onDelete(scope.row)"
+                                ></el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -102,7 +164,18 @@ export default {
                 order_by: "",
                 order: "",
             },
+            list_roles: [],
+            filter: {
+                role: "",
+                search: "",
+            },
         };
+    },
+
+    watch: {
+        'filter.role' : function(value) {
+            this.fetchData();
+        }
     },
     methods: {
         queryServer(customProperties) {
@@ -114,29 +187,25 @@ export default {
                     order_by: this.order_meta.order_by,
                     order: this.order_meta.order,
                     search: this.searchQuery,
+                    relations: "roles",
+                    roles: this.filter.role,
+                    search : this.filter.search
                 },
                 cancelToken: cancelSource.token,
             };
             this.request = {
                 cancel: cancelSource.cancel,
             };
-            axios
-                .get(
-                    route(
-                        "api.user.user.index",
-                        _.merge(properties, customProperties)
-                    )
-                )
-                .then((response) => {
-                    if (typeof response !== "undefined") {
-                        this.tableIsLoading = false;
-                        this.data = response.data.data;
-                        this.meta = response.data.meta;
-                        this.links = response.data.links;
-                        this.order_meta.order_by = properties.order_by;
-                        this.order_meta.order = properties.order;
-                    }
-                });
+            axios.get(route("api.user.index"), properties).then((response) => {
+                if (typeof response !== "undefined") {
+                    this.tableIsLoading = false;
+                    this.data = response.data.data;
+                    this.meta = response.data.meta;
+                    this.links = response.data.links;
+                    this.order_meta.order_by = properties.order_by;
+                    this.order_meta.order = properties.order;
+                }
+            });
         },
         fetchData() {
             this.tableIsLoading = true;
@@ -146,16 +215,14 @@ export default {
         handleSizeChange(event) {
             console.log(`per page :${event}`);
             this.tableIsLoading = true;
-            this.queryServer({
-                per_page: event,
-            });
+            this.meta.per_page = event;
+            this.queryServer();
         },
         handleCurrentChange(event) {
             console.log(`current page :${event}`);
             this.tableIsLoading = true;
-            this.queryServer({
-                page: event,
-            });
+            this.meta.current_page = event;
+            this.queryServer();
         },
         handleSortChange(event) {
             console.log("sorting", event);
@@ -175,6 +242,47 @@ export default {
         cancel() {
             this.request.cancel();
         },
+
+        onDelete(row) {
+            axios
+                .delete(
+                    route("api.user.destroy", {
+                        user: row.id,
+                    })
+                )
+                .then((response) => {
+                    this.$notify({
+                        title: "Pemberitahuan",
+                        message: response.data.message,
+                        type: "success",
+                    });
+
+                    this.fetchData();
+                });
+        },
+
+        fetchRoles() {
+            axios
+                .get(route("api.role.index"), {
+                    params: {
+                        type: "all",
+                    },
+                })
+                .then((response) => {
+                    this.list_roles = response.data.data;
+                });
+        },
+    },
+
+    mounted() {
+        this.fetchData();
+        this.fetchRoles();
     },
 };
 </script>
+
+<style>
+.filter-text {
+    font-size: 14px !important;
+}
+</style>

@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +20,14 @@ Route::get('/', function () {
     return view('welcome');
 })->name('root');
 
-Auth::routes();
 
 Route::group(['prefix' => 'admin' , 'middleware' => 'auth'] , function() {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('users', UserController::class);
+    Route::resource('roles', RoleController::class);
+});
+
+Route::group(['prefix' => 'auth'] , function() {
+    Auth::routes();
+    // Route::get('/login' , [AuthController::class , 'login'])->name('auth.login');
 });

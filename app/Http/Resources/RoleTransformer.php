@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserTransformer extends JsonResource
+class RoleTransformer extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,8 +14,11 @@ class UserTransformer extends JsonResource
      */
     public function toArray($request)
     {
-        $user = parent::toArray($request);
-        $user['roles'] = $this->whenLoaded('roles');
-        return $user;
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

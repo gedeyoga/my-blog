@@ -3,10 +3,20 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserTransformer;
+use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    protected $user_repo;
+
+    public function __construct()
+    {
+        $this->user_repo = app(UserRepository::class);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +24,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return view('layouts.main');
+        $users = $this->user_repo->listUser($request);
+        return UserTransformer::collection($users);
     }
 
     /**
@@ -35,7 +46,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $this->user_repo->createUser($request->all());
+        return response()->json([
+            'message' => 'Tambah data user berhasil!',
+            'data' => new UserTransformer($user)
+        ]);
     }
 
     /**
@@ -44,9 +59,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show( User $user)
     {
-        //
+        $user->load('roles');
+        return new UserTransformer($user);
     }
 
     /**
@@ -67,9 +83,19 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $data = $request->except(['password']);
+        if($request->get('change_password')) {
+            $data['password'] = bcrypt($request->get('password'));
+        }
+
+        $user = $this->user_repo->updateUser($user , $data);
+
+        return response()->json([
+            'message' => 'Berhasil memperbaharui data user!',
+            'data' => new UserTransformer($user),
+        ]);
     }
 
     /**
@@ -78,8 +104,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $this->user_repo->deleteUser($user);
+
+        return response()->json([
+            'message' => 'Berhasil menghapus data user!',
+        ]);
     }
 }

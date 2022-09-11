@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,10 +17,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::post('/login' , [LoginController::class , 'login'])->name('api.login');
 
 Route::group(['middleware' => 'auth:sanctum'] , function() {
-    Route::prefix('user')->resource('user' , UserController::class );
+    Route::post('/logout', [LoginController::class, 'logout'])->name('api.logout');
+
+
+    Route::prefix('user')->apiResource('user' , UserController::class , ['as' => 'api']);
+    Route::prefix('role')->apiResource('role' , RoleController::class , ['as' => 'api']);
+
+    
 });

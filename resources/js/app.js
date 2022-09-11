@@ -32,21 +32,21 @@ if (token) {
     );
 }
 
-const userApiToken = document.head.querySelector('meta[name="api-token"]');
+const userApiToken = localStorage.getItem('token');
 
 if (userApiToken) {
-    window.axios.defaults.headers.common.Authorization = `Bearer ${userApiToken.content}`;
+    window.axios.defaults.headers.common.Authorization = `Bearer ${userApiToken}`;
 } else {
     console.error("User API token not found in a meta tag.");
 }
 
-
-require("./mixins.js");
-require("./components.js");
-
 Vue.use(ElementUI, { locale });
 
-const base_url = document.head.querySelector('meta[name="base-url"]').content;
+let base_url = document.head.querySelector('meta[name="base-url"]');
+
+if(base_url) {
+    base_url = base_url.content;
+}
 Vue.prototype.$url = base_url;
 Vue.prototype.$csrfToken = token;
 
@@ -72,20 +72,33 @@ const app = new Vue({
     el: "#app",
     router: routes,
     render: (h) => h(App),
-    methods: {
-        splashScreen() {
-            return this.$loading({
-                lock: true,
-                text: "Loading",
-                spinner: "el-icon-loading",
-                background: "rgba(0, 0, 0, 0.7)",
-            });
-        }
-    },
-    created() {
-        this.splashScreen();
-    },
-    mounted() {
-        this.splashScreen().close();
+});
+
+window.axios.interceptors.response.use(null, (error) => {
+    if (error.response === undefined) {
+        return;
     }
+    if (error.response.status === 403) {
+        app.$message.error('Sesi telah berakhir!. silahkan login terlebih dahulu!');
+        axios.post(route('logout')).then((response) => {
+            window.location = response.data.redirect
+        });
+    }
+    if (error.response.status === 401) {
+        app.$message.error(
+            "Silahkan login terlebih dahulu!"
+        );
+        axios.post(route("logout")).then((response) => {
+             window.location = response.data.redirect;
+        });
+    }
+
+     if (error.response.status === 500) {
+         app.$message.error({
+             // title: app.$t("core.internal server error"),
+             message: 'Terjadi kesalahan pada sistem!',
+         });
+     }
+
+    return Promise.reject(error);
 });
