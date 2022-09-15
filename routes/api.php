@@ -27,8 +27,12 @@ Route::group(['middleware' => 'auth:sanctum'] , function() {
     Route::post('/logout', [LoginController::class, 'logout'])->name('api.logout');
 
 
-    Route::prefix('user')->apiResource('user' , UserController::class , ['as' => 'api']);
-    Route::prefix('role')->apiResource('role' , RoleController::class , ['as' => 'api']);
+    Route::prefix('users')->apiResource('user' , UserController::class , ['as' => 'api']);
+    Route::prefix('roles')->apiResource('role' , RoleController::class , ['as' => 'api']);
+    Route::group(['prefix' => 'roles' , 'as' => 'api.role.'] , function () {
+        Route::post('/permission', [RoleController::class, 'permissionStore'])->name('permission.store');
+        Route::get('/permission', [RoleController::class, 'permissionList'])->name('permission.list');
+    });
 
     
 });

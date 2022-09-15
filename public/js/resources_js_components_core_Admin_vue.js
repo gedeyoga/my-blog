@@ -971,9 +971,20 @@ var render = function () {
                 [_vm._v("User")]
               ),
               _vm._v(" "),
-              _c("a", { staticClass: "collapse-item", attrs: { href: "#" } }, [
-                _vm._v("Role"),
-              ]),
+              _c(
+                "a",
+                {
+                  staticClass: "collapse-item",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
+                      return _vm.$router.push({ name: "roles.index" })
+                    },
+                  },
+                },
+                [_vm._v("Role")]
+              ),
             ]),
           ]
         ),

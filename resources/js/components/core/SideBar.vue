@@ -63,7 +63,12 @@
                         @click.prevent="$router.push({ name: 'users.index' })"
                         >User</a
                     >
-                    <a class="collapse-item" href="#">Role</a>
+                    <a
+                        class="collapse-item"
+                        href="#"
+                        @click.prevent="$router.push({ name: 'roles.index' })"
+                        >Role</a
+                    >
                 </div>
             </div>
         </li>
