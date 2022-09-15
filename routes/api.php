@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
@@ -26,13 +27,19 @@ Route::post('/login' , [LoginController::class , 'login'])->name('api.login');
 Route::group(['middleware' => 'auth:sanctum'] , function() {
     Route::post('/logout', [LoginController::class, 'logout'])->name('api.logout');
 
-
+    //User
     Route::prefix('users')->apiResource('user' , UserController::class , ['as' => 'api']);
+
+    //Role
     Route::prefix('roles')->apiResource('role' , RoleController::class , ['as' => 'api']);
+
+    //Permissions
     Route::group(['prefix' => 'roles' , 'as' => 'api.role.'] , function () {
         Route::post('/permission', [RoleController::class, 'permissionStore'])->name('permission.store');
         Route::get('/permission', [RoleController::class, 'permissionList'])->name('permission.list');
     });
+
+    Route::prefix('categories')->apiResource('category', CategoryController::class, ['as' => 'api']);
 
     
 });

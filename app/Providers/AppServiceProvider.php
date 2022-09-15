@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Models\Role;
 use App\Models\User;
+use App\Repositories\CategoryRepository;
+use App\Repositories\Eloquent\EloquentCategoryRepository;
 use App\Repositories\Eloquent\EloquentRoleRepository;
 use App\Repositories\Eloquent\EloquentUserRepository;
 use App\Repositories\RoleRepository;
@@ -45,6 +48,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RoleRepository::class, function (){
 
             $repository = new EloquentRoleRepository(new Role());
+
+            return $repository;
+
+        });
+
+        $this->app->bind(CategoryRepository::class, function (){
+
+            $repository = new EloquentCategoryRepository(new Category());
 
             return $repository;
 
