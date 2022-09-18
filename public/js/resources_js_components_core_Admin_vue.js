@@ -1021,6 +1021,21 @@ var render = function () {
                   on: {
                     click: function ($event) {
                       $event.preventDefault()
+                      return _vm.$router.push({ name: "posts.index" })
+                    },
+                  },
+                },
+                [_vm._v("Postingan")]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "collapse-item",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function ($event) {
+                      $event.preventDefault()
                       return _vm.$router.push({ name: "categories.index" })
                     },
                   },

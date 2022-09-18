@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Post;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Database\Seeders\RoleSeeder;

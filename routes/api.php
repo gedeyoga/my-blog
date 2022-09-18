@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -40,6 +41,6 @@ Route::group(['middleware' => 'auth:sanctum'] , function() {
     });
 
     Route::prefix('categories')->apiResource('category', CategoryController::class, ['as' => 'api']);
-
+    Route::prefix('posts')->apiResource('post', PostController::class, ['as' => 'api']);
     
 });

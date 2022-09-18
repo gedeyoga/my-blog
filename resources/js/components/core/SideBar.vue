@@ -101,6 +101,14 @@
                         class="collapse-item"
                         href="#"
                         @click.prevent="
+                            $router.push({ name: 'posts.index' })
+                        "
+                        >Postingan</a
+                    >
+                    <a
+                        class="collapse-item"
+                        href="#"
+                        @click.prevent="
                             $router.push({ name: 'categories.index' })
                         "
                         >Kategori</a
