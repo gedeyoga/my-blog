@@ -36,6 +36,8 @@ class PostController extends Controller
 
         $data = $request->except('thumbnail');
 
+        dd($data);
+
         $post = $post_repo->createPost($data);
 
         return response()->json([

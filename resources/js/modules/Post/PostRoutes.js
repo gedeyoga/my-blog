@@ -9,13 +9,8 @@ export default [
         component: PostList,
     },
     {
-        path: "/admin/posts/create",
-        name: "posts.create",
-        component: PostForm,
-    },
-    {
-        path: "/admin/posts/:category/edit",
-        name: "posts.edit",
+        path: "/admin/posts/:post/draft",
+        name: "posts.draft",
         component: PostForm,
     },
 ];

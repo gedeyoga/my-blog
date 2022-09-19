@@ -1,160 +1,139 @@
 <template>
     <div>
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Tambah Kategori</h1>
-            <nav aria-label="breadcrumb ">
-                <ol class="breadcrumb bg-light">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item">
-                        <a href="#">List Kategori</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Tambah Kategori
-                    </li>
-                </ol>
-            </nav>
-        </div>
-
-        <div class="card">
-            <div
-                class="card-header d-flex justify-content-between align-items-center"
-            >
-                <span>Tambah Kategori</span>
+        <el-form
+            :model="data_post"
+            :rules="rules"
+            ref="postForm"
+            size="mini"
+            label-position="top"
+        >
+            <div class="row align-items-center mb-3">
+                <div class="col-md-8">
+                    <el-form-item label="Judul" prop="title">
+                        <el-input
+                            v-model="data_post.title"
+                            placeholder="Masukkan judul postingan..."
+                            @change="onEditPost"
+                        ></el-input>
+                    </el-form-item>
+                </div>
+                <div class="col-md-4 d-flex justify-content-md-end">
+                    <el-button-group>
+                        <el-button
+                            size="small"
+                            type="plain"
+                            icon="el-icon-setting"
+                            >Pengaturan</el-button
+                        >
+                        <el-button
+                            size="small"
+                            type="warning"
+                            icon="el-icon-document"
+                            v-loading="loading"
+                            >Draft</el-button
+                        >
+                        <el-button
+                            size="small"
+                            type="primary"
+                            icon="el-icon-upload2"
+                            >Publish</el-button
+                        >
+                    </el-button-group>
+                </div>
             </div>
-            <div class="card-body">
-                <el-form
-                    :model="data_category"
-                    :rules="rules"
-                    ref="categoryForm"
-                    size="small"
-                    label-position="top"
-                    v-loading="loading"
-                >
-                    <el-form-item label="Kategori" prop="name">
-                        <el-input
-                            v-model="data_category.name"
-                            placeholder="Cth: Yoga Permana"
-                        ></el-input>
-                    </el-form-item>
-                    <el-form-item label="Deskripsi" prop="description">
-                        <el-input
-                            type="text"
-                            v-model="data_category.description"
-                            placeholder="Cth: permana0912@gmail.com"
-                        ></el-input>
-                    </el-form-item>
+
+            <div class="card">
+                <div class="card-body">
+                    <ckeditor
+                        v-model="data_post.article"
+                        :config="editorConfig"
+                        @blur="onEditPost"
+                    ></ckeditor>
 
                     <el-form-item>
                         <div class="text-center mt-3">
-                            <el-button
-                                v-loading="loading"
-                                @click.prevent="$router.back()"
+                            <el-button @click.prevent="$router.back()"
                                 >Kembali</el-button
                             >
-                            <el-button
-                                v-loading="loading"
-                                type="primary"
-                                @click="onSubmit()"
-                            >
-                                {{
-                                    $route.params.category
-                                        ? "Simpan Kategori"
-                                        : "Tambah Kategori"
-                                }}
-                            </el-button>
                         </div>
                     </el-form-item>
-                </el-form>
+                </div>
             </div>
-        </div>
+        </el-form>
     </div>
 </template>
 
 <script>
+import _ from "lodash";
+
 export default {
     data() {
         return {
-            data_category: {
-                name: "",
-                description: "",
+            data_post: {
+                title: "",
+                article: "",
+                created_by: null,
+            },
+            editorConfig: {
+                // The configuration of the editor.
             },
             loading: false,
             rules: {
-                name: [{ required: true, message: "Kategori tidak boleh kosong!" }],
+                name: [
+                    {
+                        required: true,
+                        message: "Postingan tidak boleh kosong!",
+                    },
+                ],
                 description: [
                     { required: true, message: "Deskripsi tidak boleh kosong" },
                 ],
             },
-
         };
     },
     methods: {
         onSubmit() {
-            this.$refs["categoryForm"].validate((valid) => {
-                let fields = this.$refs["categoryForm"].fields;
-                for (let i = 0; i < fields.length; i++) {
-                    if (fields[i].validateState == "error") {
-                        $(fields[i].$el).find("input").focus();
-                        return false;
-                    }
-                }
+            this.loading = true;
+            let data = this.data_post;
+            data.created_by = this.user.id;
 
-                if (valid) {
-                    this.$confirm("Apakah anda yakin ?", "Konfirmasi", {
-                        confirmButtonText: "Simpan",
-                        cancelButtonText: "Batal",
-                        type: "warning",
-                    }).then((result) => {
-                        this.loading = true;
-
-                        this.getRoute()
-                            .then((response) => {
-                                this.loading = false;
-                                this.$notify({
-                                    title: "Pemberitahuan",
-                                    message: response.data.message,
-                                    type: "success",
-                                });
-                                this.$router.push({ name: "categories.index" });
-                            })
-                            .catch((response) => {
-                                this.loading = false;
-                            });
-                    });
-                }
-            });
+            axios
+                .put(
+                    route("api.post.update", {
+                        post: this.$route.params.post,
+                    }),
+                    this.data_post
+                )
+                .then((response) => {
+                    this.loading = false;
+                })
+                .catch((response) => {
+                    this.loading = false;
+                });
         },
 
         fetchData() {
             axios
                 .get(
-                    route("api.category.show", {
-                        category: this.$route.params.category,
+                    route("api.post.show", {
+                        post: this.$route.params.post,
                     })
                 )
                 .then((response) => {
-                    let category = response.data.data;
-                    this.data_category = category;
+                    let post = response.data.data;
+                    this.data_post = post;
                 });
         },
 
-        getRoute() {
-            if (typeof this.$route.params.category != "undefined") {
-                return axios.put(
-                    route("api.category.update", {
-                        category: this.$route.params.category,
-                    }),
-                    this.data_category
-                );
-            }
-            return axios.post(route("api.category.store"), this.data_category);
-        },
+        onEditPost: _.debounce(function () {
+            this.onSubmit();
+        }),
     },
 
     mounted() {
-        if (typeof this.$route.params.category != "undefined") {
+        if (typeof this.$route.params.post != "undefined") {
             this.fetchData();
         }
-    }
+    },
 };
 </script>

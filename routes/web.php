@@ -28,7 +28,10 @@ Route::group(['prefix' => 'admin' , 'middleware' => 'auth'] , function() {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('posts', PostController::class);
+
+    //Post
+    Route::get('/posts' , [PostController::class, 'index'])->name('posts.index');
+    Route::get('/posts/{post}/draft' , [PostController::class , 'draft'])->name('posts.draft');
 });
 
 Route::group(['prefix' => 'auth'] , function() {

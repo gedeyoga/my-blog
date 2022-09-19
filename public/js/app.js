@@ -3963,6 +3963,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -4028,25 +4030,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      data_category: {
-        name: "",
-        description: ""
+      data_post: {
+        title: "",
+        article: "",
+        created_by: null
+      },
+      editorConfig: {// The configuration of the editor.
       },
       loading: false,
       rules: {
         name: [{
           required: true,
-          message: "Kategori tidak boleh kosong!"
+          message: "Postingan tidak boleh kosong!"
         }],
         description: [{
           required: true,
@@ -4059,65 +4058,33 @@ __webpack_require__.r(__webpack_exports__);
     onSubmit: function onSubmit() {
       var _this = this;
 
-      this.$refs["categoryForm"].validate(function (valid) {
-        var fields = _this.$refs["categoryForm"].fields;
-
-        for (var i = 0; i < fields.length; i++) {
-          if (fields[i].validateState == "error") {
-            $(fields[i].$el).find("input").focus();
-            return false;
-          }
-        }
-
-        if (valid) {
-          _this.$confirm("Apakah anda yakin ?", "Konfirmasi", {
-            confirmButtonText: "Simpan",
-            cancelButtonText: "Batal",
-            type: "warning"
-          }).then(function (result) {
-            _this.loading = true;
-
-            _this.getRoute().then(function (response) {
-              _this.loading = false;
-
-              _this.$notify({
-                title: "Pemberitahuan",
-                message: response.data.message,
-                type: "success"
-              });
-
-              _this.$router.push({
-                name: "categories.index"
-              });
-            })["catch"](function (response) {
-              _this.loading = false;
-            });
-          });
-        }
+      this.loading = true;
+      var data = this.data_post;
+      data.created_by = this.user.id;
+      axios.put(route("api.post.update", {
+        post: this.$route.params.post
+      }), this.data_post).then(function (response) {
+        _this.loading = false;
+      })["catch"](function (response) {
+        _this.loading = false;
       });
     },
     fetchData: function fetchData() {
       var _this2 = this;
 
-      axios.get(route("api.category.show", {
-        category: this.$route.params.category
+      axios.get(route("api.post.show", {
+        post: this.$route.params.post
       })).then(function (response) {
-        var category = response.data.data;
-        _this2.data_category = category;
+        var post = response.data.data;
+        _this2.data_post = post;
       });
     },
-    getRoute: function getRoute() {
-      if (typeof this.$route.params.category != "undefined") {
-        return axios.put(route("api.category.update", {
-          category: this.$route.params.category
-        }), this.data_category);
-      }
-
-      return axios.post(route("api.category.store"), this.data_category);
-    }
+    onEditPost: lodash__WEBPACK_IMPORTED_MODULE_0___default().debounce(function () {
+      this.onSubmit();
+    })
   },
   mounted: function mounted() {
-    if (typeof this.$route.params.category != "undefined") {
+    if (typeof this.$route.params.post != "undefined") {
       this.fetchData();
     }
   }
@@ -4265,6 +4232,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -4282,7 +4253,8 @@ __webpack_require__.r(__webpack_exports__);
       list_roles: [],
       filter: {
         search: ""
-      }
+      },
+      loading_draft: false
     };
   },
   methods: {
@@ -4362,6 +4334,28 @@ __webpack_require__.r(__webpack_exports__);
         });
 
         _this2.fetchData();
+      });
+    },
+    onCreateDraftPost: function onCreateDraftPost() {
+      var _this3 = this;
+
+      this.loading_draft = true;
+      axios.post(route("api.post.store"), {
+        slug: null,
+        title: null,
+        article: null,
+        created_by: this.user.id
+      }).then(function (response) {
+        _this3.loading_draft = false;
+
+        _this3.$router.push({
+          name: "posts.draft",
+          params: {
+            post: response.data.data.id
+          }
+        });
+      })["catch"](function () {
+        _this3.loading_draft = false;
       });
     }
   },
@@ -5847,15 +5841,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var element_ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! element-ui */ "./node_modules/element-ui/lib/element-ui.common.js");
 /* harmony import */ var element_ui__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(element_ui__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var element_ui_lib_locale_lang_en__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! element-ui/lib/locale/lang/en */ "./node_modules/element-ui/lib/locale/lang/en.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _components_core_App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/core/App */ "./resources/js/components/core/App.vue");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var ckeditor4_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ckeditor4-vue */ "./node_modules/ckeditor4-vue/dist/ckeditor.js");
+/* harmony import */ var ckeditor4_vue__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ckeditor4_vue__WEBPACK_IMPORTED_MODULE_4__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js")["default"]);
+
 
 
 
@@ -5885,17 +5882,18 @@ if (userApiToken) {
   console.error("User API token not found in a meta tag.");
 }
 
-vue__WEBPACK_IMPORTED_MODULE_4__["default"].use((element_ui__WEBPACK_IMPORTED_MODULE_0___default()), {
+vue__WEBPACK_IMPORTED_MODULE_5__["default"].use((element_ui__WEBPACK_IMPORTED_MODULE_0___default()), {
   locale: element_ui_lib_locale_lang_en__WEBPACK_IMPORTED_MODULE_1__["default"]
 });
+vue__WEBPACK_IMPORTED_MODULE_5__["default"].use((ckeditor4_vue__WEBPACK_IMPORTED_MODULE_4___default()));
 var base_url = document.head.querySelector('meta[name="base-url"]');
 
 if (base_url) {
   base_url = base_url.content;
 }
 
-vue__WEBPACK_IMPORTED_MODULE_4__["default"].prototype.$url = base_url;
-vue__WEBPACK_IMPORTED_MODULE_4__["default"].prototype.$csrfToken = token;
+vue__WEBPACK_IMPORTED_MODULE_5__["default"].prototype.$url = base_url;
+vue__WEBPACK_IMPORTED_MODULE_5__["default"].prototype.$csrfToken = token;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -5912,7 +5910,7 @@ vue__WEBPACK_IMPORTED_MODULE_4__["default"].prototype.$csrfToken = token;
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var app = new vue__WEBPACK_IMPORTED_MODULE_4__["default"]({
+var app = new vue__WEBPACK_IMPORTED_MODULE_5__["default"]({
   el: "#app",
   router: _routes__WEBPACK_IMPORTED_MODULE_3__["default"],
   render: function render(h) {
@@ -6022,12 +6020,8 @@ __webpack_require__.r(__webpack_exports__);
   name: "posts.index",
   component: _components_PostList__WEBPACK_IMPORTED_MODULE_0__["default"]
 }, {
-  path: "/admin/posts/create",
-  name: "posts.create",
-  component: _components_PostForm__WEBPACK_IMPORTED_MODULE_1__["default"]
-}, {
-  path: "/admin/posts/:category/edit",
-  name: "posts.edit",
+  path: "/admin/posts/:post/draft",
+  name: "posts.draft",
   component: _components_PostForm__WEBPACK_IMPORTED_MODULE_1__["default"]
 }]);
 
@@ -6242,6 +6236,22 @@ exports["default"] = typeof _symbol2.default === "function" && _typeof(_iterator
 } : function (obj) {
   return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
+
+/***/ }),
+
+/***/ "./node_modules/ckeditor4-vue/dist/ckeditor.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/ckeditor4-vue/dist/ckeditor.js ***!
+  \*****************************************************/
+/***/ ((module) => {
+
+/*! For license information please see ckeditor.js.LICENSE.txt */
+/*!*
+ * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+!function(t,e){ true?module.exports=e():0}(window,(function(){return function(t){var e={};function n(i){if(e[i])return e[i].exports;var r=e[i]={i:i,l:!1,exports:{}};return t[i].call(r.exports,r,r.exports,n),r.l=!0,r.exports}return n.m=t,n.c=e,n.d=function(t,e,i){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:i})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var r in t)n.d(i,r,function(e){return t[e]}.bind(null,r));return i},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=0)}([function(t,e,n){t.exports=n(1)},function(t,e,n){"use strict";function i(t,e){t.onload=function(){this.onerror=this.onload=null,e(null,t)},t.onerror=function(){this.onerror=this.onload=null,e(new Error("Failed to load "+this.src),t)}}function r(t,e){t.onreadystatechange=function(){"complete"!=this.readyState&&"loaded"!=this.readyState||(this.onreadystatechange=null,e(null,t))}}var o;function a(t,e){return"CKEDITOR"in window?Promise.resolve(CKEDITOR):"string"!=typeof t||t.length<1?Promise.reject(new TypeError("CKEditor URL must be a non-empty string.")):(o||(o=a.scriptLoader(t).then((function(t){return e&&e(t),t}))),o)}n.r(e),a.scriptLoader=function(t){return new Promise((function(e,n){!function(t,e,n){var o=document.head||document.getElementsByTagName("head")[0],a=document.createElement("script");"function"==typeof e&&(n=e,e={}),e=e||{},n=n||function(){},a.type=e.type||"text/javascript",a.charset=e.charset||"utf8",a.async=!("async"in e)||!!e.async,a.src=t,e.attrs&&function(t,e){for(var n in e)t.setAttribute(n,e[n])}(a,e.attrs),e.text&&(a.text=String(e.text)),("onload"in a?i:r)(a,n),a.onload||i(a,n),o.appendChild(a)}(t,(function(t){return o=void 0,t?n(t):window.CKEDITOR?void e(CKEDITOR):n(new Error("Script loaded from editorUrl doesn't provide CKEDITOR namespace."))}))}))};var s={name:"ckeditor",render(t){return t("div",{},[t(this.tagName)])},props:{value:{type:String,default:""},type:{type:String,default:"classic",validator:t=>["classic","inline"].includes(t)},editorUrl:{type:String,default:"https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"},config:{type:Object,default:()=>{}},tagName:{type:String,default:"textarea"},readOnly:{type:Boolean,default:null},throttle:{type:Number,default:80}},mounted(){a(this.editorUrl,(t=>{this.$emit("namespaceloaded",t)})).then((()=>{if(this.$_destroyed)return;const t=this.prepareConfig(),e="inline"===this.type?"inline":"replace",n=this.$el.firstElementChild;CKEDITOR[e](n,t)}))},beforeDestroy(){this.instance&&this.instance.destroy(),this.$_destroyed=!0},watch:{value(t){this.instance&&this.instance.getData()!==t&&this.instance.setData(t)},readOnly(t){this.instance&&this.instance.setReadOnly(t)}},methods:{prepareConfig(){const t=this.config||{};t.on=t.on||{},void 0===t.delayIfDetached&&(t.delayIfDetached=!0),null!==this.readOnly&&(t.readOnly=this.readOnly);const e=t.on.instanceReady;return t.on.instanceReady=t=>{this.instance=t.editor,this.$nextTick().then((()=>{this.prepareComponentData(),e&&e(t)}))},t},prepareComponentData(){const t=this.value;this.instance.fire("lockSnapshot"),this.instance.setData(t,{callback:()=>{this.$_setUpEditorEvents();const e=this.instance.getData();t!==e?(this.$once("input",(()=>{this.$emit("ready",this.instance)})),this.$emit("input",e)):this.$emit("ready",this.instance),this.instance.fire("unlockSnapshot")}})},$_setUpEditorEvents(){const t=this.instance,e=function(t,e){var n,i=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return function(){clearTimeout(n);for(var r=arguments.length,o=new Array(r),a=0;a<r;a++)o[a]=arguments[a];n=setTimeout(t.bind.apply(t,[i].concat(o)),e)}}((e=>{const n=t.getData();this.value!==n&&this.$emit("input",n,e,t)}),this.throttle);t.on("change",e),t.on("focus",(e=>{this.$emit("focus",e,t)})),t.on("blur",(e=>{this.$emit("blur",e,t)}))}}};const c={install(t){t.component("ckeditor",s)},component:s};e.default=c}]).default}));
+//# sourceMappingURL=ckeditor.js.map
 
 /***/ }),
 
@@ -87932,99 +87942,65 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
-      _vm._m(1),
-      _vm._v(" "),
+  return _c(
+    "div",
+    [
       _c(
-        "div",
-        { staticClass: "card-body" },
+        "el-form",
+        {
+          ref: "postForm",
+          attrs: {
+            model: _vm.data_post,
+            rules: _vm.rules,
+            size: "mini",
+            "label-position": "top",
+          },
+        },
         [
-          _c(
-            "el-form",
-            {
-              directives: [
-                {
-                  name: "loading",
-                  rawName: "v-loading",
-                  value: _vm.loading,
-                  expression: "loading",
-                },
-              ],
-              ref: "categoryForm",
-              attrs: {
-                model: _vm.data_category,
-                rules: _vm.rules,
-                size: "small",
-                "label-position": "top",
-              },
-            },
-            [
-              _c(
-                "el-form-item",
-                { attrs: { label: "Kategori", prop: "name" } },
-                [
-                  _c("el-input", {
-                    attrs: { placeholder: "Cth: Yoga Permana" },
-                    model: {
-                      value: _vm.data_category.name,
-                      callback: function ($$v) {
-                        _vm.$set(_vm.data_category, "name", $$v)
-                      },
-                      expression: "data_category.name",
-                    },
-                  }),
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "el-form-item",
-                { attrs: { label: "Deskripsi", prop: "description" } },
-                [
-                  _c("el-input", {
-                    attrs: {
-                      type: "text",
-                      placeholder: "Cth: permana0912@gmail.com",
-                    },
-                    model: {
-                      value: _vm.data_category.description,
-                      callback: function ($$v) {
-                        _vm.$set(_vm.data_category, "description", $$v)
-                      },
-                      expression: "data_category.description",
-                    },
-                  }),
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("el-form-item", [
+          _c("div", { staticClass: "row align-items-center mb-3" }, [
+            _c(
+              "div",
+              { staticClass: "col-md-8" },
+              [
                 _c(
-                  "div",
-                  { staticClass: "text-center mt-3" },
+                  "el-form-item",
+                  { attrs: { label: "Judul", prop: "title" } },
+                  [
+                    _c("el-input", {
+                      attrs: { placeholder: "Masukkan judul postingan..." },
+                      on: { change: _vm.onEditPost },
+                      model: {
+                        value: _vm.data_post.title,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.data_post, "title", $$v)
+                        },
+                        expression: "data_post.title",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "col-md-4 d-flex justify-content-md-end" },
+              [
+                _c(
+                  "el-button-group",
                   [
                     _c(
                       "el-button",
                       {
-                        directives: [
-                          {
-                            name: "loading",
-                            rawName: "v-loading",
-                            value: _vm.loading,
-                            expression: "loading",
-                          },
-                        ],
-                        on: {
-                          click: function ($event) {
-                            $event.preventDefault()
-                            return _vm.$router.back()
-                          },
+                        attrs: {
+                          size: "small",
+                          type: "plain",
+                          icon: "el-icon-setting",
                         },
                       },
-                      [_vm._v("Kembali")]
+                      [_vm._v("Pengaturan")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -88038,95 +88014,83 @@ var render = function () {
                             expression: "loading",
                           },
                         ],
-                        attrs: { type: "primary" },
-                        on: {
-                          click: function ($event) {
-                            return _vm.onSubmit()
-                          },
+                        attrs: {
+                          size: "small",
+                          type: "warning",
+                          icon: "el-icon-document",
                         },
                       },
-                      [
-                        _vm._v(
-                          "\n                            " +
-                            _vm._s(
-                              _vm.$route.params.category
-                                ? "Simpan Kategori"
-                                : "Tambah Kategori"
-                            ) +
-                            "\n                        "
-                        ),
-                      ]
+                      [_vm._v("Draft")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-button",
+                      {
+                        attrs: {
+                          size: "small",
+                          type: "primary",
+                          icon: "el-icon-upload2",
+                        },
+                      },
+                      [_vm._v("Publish")]
                     ),
                   ],
                   1
                 ),
-              ]),
-            ],
-            1
-          ),
-        ],
-        1
-      ),
-    ]),
-  ])
-}
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "d-sm-flex align-items-center justify-content-between mb-4",
-      },
-      [
-        _c("h1", { staticClass: "h3 mb-0 text-gray-800" }, [
-          _vm._v("Tambah Kategori"),
-        ]),
-        _vm._v(" "),
-        _c("nav", { attrs: { "aria-label": "breadcrumb " } }, [
-          _c("ol", { staticClass: "breadcrumb bg-light" }, [
-            _c("li", { staticClass: "breadcrumb-item" }, [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Home")]),
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "breadcrumb-item" }, [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("List Kategori")]),
-            ]),
-            _vm._v(" "),
-            _c(
-              "li",
-              {
-                staticClass: "breadcrumb-item active",
-                attrs: { "aria-current": "page" },
-              },
-              [
-                _vm._v(
-                  "\n                    Tambah Kategori\n                "
-                ),
-              ]
+              ],
+              1
             ),
           ]),
-        ]),
-      ]
-    )
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass:
-          "card-header d-flex justify-content-between align-items-center",
-      },
-      [_c("span", [_vm._v("Tambah Kategori")])]
-    )
-  },
-]
+          _vm._v(" "),
+          _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("ckeditor", {
+                  attrs: { config: _vm.editorConfig },
+                  on: { blur: _vm.onEditPost },
+                  model: {
+                    value: _vm.data_post.article,
+                    callback: function ($$v) {
+                      _vm.$set(_vm.data_post, "article", $$v)
+                    },
+                    expression: "data_post.article",
+                  },
+                }),
+                _vm._v(" "),
+                _c("el-form-item", [
+                  _c(
+                    "div",
+                    { staticClass: "text-center mt-3" },
+                    [
+                      _c(
+                        "el-button",
+                        {
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.$router.back()
+                            },
+                          },
+                        },
+                        [_vm._v("Kembali")]
+                      ),
+                    ],
+                    1
+                  ),
+                ]),
+              ],
+              1
+            ),
+          ]),
+        ]
+      ),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -88165,12 +88129,16 @@ var render = function () {
           _c(
             "el-button",
             {
-              attrs: { type: "primary", size: "small", icon: "fas fa-plus" },
-              on: {
-                click: function ($event) {
-                  return _vm.$router.push({ name: "posts.create" })
+              directives: [
+                {
+                  name: "loading",
+                  rawName: "v-loading",
+                  value: _vm.loading_draft,
+                  expression: "loading_draft",
                 },
-              },
+              ],
+              attrs: { type: "primary", size: "small", icon: "fas fa-plus" },
+              on: { click: _vm.onCreateDraftPost },
             },
             [_vm._v("Tambah Postingan")]
           ),
@@ -88267,30 +88235,42 @@ var render = function () {
                     key: "default",
                     fn: function (scope) {
                       return [
-                        _c(
-                          "a",
-                          {
-                            attrs: { href: "#" },
-                            on: {
-                              click: function ($event) {
-                                $event.preventDefault()
-                                return _vm.$router.push({
-                                  name: "posts.edit",
-                                  params: {
-                                    post: scope.row.id,
+                        scope.row.title
+                          ? _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function ($event) {
+                                    $event.preventDefault()
+                                    return _vm.$router.push({
+                                      name: "posts.draft",
+                                      params: {
+                                        post: scope.row.id,
+                                      },
+                                    })
                                   },
-                                })
+                                },
                               },
-                            },
-                          },
-                          [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(scope.row.name) +
-                                "\n                        "
-                            ),
-                          ]
-                        ),
+                              [
+                                _vm._v(
+                                  "\n                            " +
+                                    _vm._s(scope.row.title) +
+                                    "\n                        "
+                                ),
+                              ]
+                            )
+                          : _c("span", { staticClass: "text-warning" }, [
+                              _c("i", [_vm._v("(Judul belum dibuat)")]),
+                            ]),
+                        _vm._v("\n                        - "),
+                        scope.row.status == "draft"
+                          ? _c("span", { staticClass: "text-danger" }, [
+                              _c("b", [
+                                _c("i", [_vm._v(_vm._s(scope.row.status))]),
+                              ]),
+                            ])
+                          : _vm._e(),
                       ]
                     },
                   },
@@ -88334,7 +88314,7 @@ var render = function () {
                               on: {
                                 click: function ($event) {
                                   return _vm.$router.push({
-                                    name: "posts.edit",
+                                    name: "posts.draft",
                                     params: {
                                       post: scope.row.id,
                                     },

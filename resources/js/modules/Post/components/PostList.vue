@@ -21,16 +21,15 @@
                     type="primary"
                     size="small"
                     icon="fas fa-plus"
-                    @click="$router.push({ name: 'posts.create' })"
+                    @click="onCreateDraftPost"
+                    v-loading="loading_draft"
                     >Tambah Postingan</el-button
                 >
             </div>
             <div class="card-body">
                 <div class="row mb-3 align-items-end">
                     <div class="col-md-9">
-                        <div
-                            class="btn-group float-right"
-                        >
+                        <div class="btn-group float-right">
                             <el-input
                                 size="mini"
                                 prefix-icon="el-icon-search"
@@ -60,9 +59,10 @@
                     <el-table-column prop="name" label="Postingan">
                         <template slot-scope="scope">
                             <a
+                                v-if="scope.row.title"
                                 @click.prevent="
                                     $router.push({
-                                        name: 'posts.edit',
+                                        name: 'posts.draft',
                                         params: {
                                             post: scope.row.id,
                                         },
@@ -70,8 +70,12 @@
                                 "
                                 href="#"
                             >
-                                {{ scope.row.name }}
+                                {{ scope.row.title }}
                             </a>
+                            <span v-else class="text-warning"
+                                ><i>(Judul belum dibuat)</i></span
+                            >
+                            - <span class="text-danger" v-if="scope.row.status == 'draft'"><b><i>{{ scope.row.status }}</i></b></span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="updated_at" label="Diperbaharui">
@@ -88,7 +92,7 @@
                                     icon="el-icon-edit"
                                     @click="
                                         $router.push({
-                                            name: 'posts.edit',
+                                            name: 'posts.draft',
                                             params: {
                                                 post: scope.row.id,
                                             },
@@ -143,8 +147,9 @@ export default {
             },
             list_roles: [],
             filter: {
-                search : "",
-            }
+                search: "",
+            },
+            loading_draft: false,
         };
     },
 
@@ -226,6 +231,29 @@ export default {
                     });
 
                     this.fetchData();
+                });
+        },
+
+        onCreateDraftPost() {
+            this.loading_draft = true;
+            axios
+                .post(route("api.post.store"), {
+                    slug: null,
+                    title: null,
+                    article: null,
+                    created_by: this.user.id,
+                })
+                .then((response) => {
+                    this.loading_draft = false;
+                    this.$router.push({
+                        name: "posts.draft",
+                        params: {
+                            post: response.data.data.id,
+                        },
+                    });
+                })
+                .catch(() => {
+                    this.loading_draft = false;
                 });
         },
     },

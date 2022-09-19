@@ -30,6 +30,9 @@ class Post extends Model
             $model->slug = Str::slug($model->title);
             $model->created_by =  $auth->id;
         });
+        static::updating(function ($model) use ($auth) {
+            $model->slug = Str::slug($model->title);
+        });
     }
 
     public function user_created()

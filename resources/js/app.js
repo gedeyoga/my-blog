@@ -11,6 +11,7 @@ import locale from "element-ui/lib/locale/lang/en";
 import Vue from "vue";
 import App from "./components/core/App";
 import routes from "./routes";
+import CKEditor from "ckeditor4-vue";
 
 window.axios = require("axios");
 
@@ -41,6 +42,7 @@ if (userApiToken) {
 }
 
 Vue.use(ElementUI, { locale });
+Vue.use(CKEditor);
 
 let base_url = document.head.querySelector('meta[name="base-url"]');
 
