@@ -3965,6 +3965,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _PostSetting_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostSetting.vue */ "./resources/js/modules/Post/components/PostSetting.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4031,13 +4041,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    PostSetting: _PostSetting_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   data: function data() {
     return {
       data_post: {
+        id: null,
         title: "",
         article: "",
-        created_by: null
+        created_by: null,
+        status: "draft"
       },
       editorConfig: {// The configuration of the editor.
       },
@@ -4051,20 +4067,20 @@ __webpack_require__.r(__webpack_exports__);
           required: true,
           message: "Deskripsi tidak boleh kosong"
         }]
-      }
+      },
+      dialog_setting: false
     };
   },
   methods: {
-    onSubmit: function onSubmit() {
+    onSubmit: function onSubmit(callback) {
       var _this = this;
 
       this.loading = true;
-      var data = this.data_post;
-      data.created_by = this.user.id;
       axios.put(route("api.post.update", {
         post: this.$route.params.post
       }), this.data_post).then(function (response) {
         _this.loading = false;
+        callback(response);
       })["catch"](function (response) {
         _this.loading = false;
       });
@@ -4081,7 +4097,60 @@ __webpack_require__.r(__webpack_exports__);
     },
     onEditPost: lodash__WEBPACK_IMPORTED_MODULE_0___default().debounce(function () {
       this.onSubmit();
-    })
+    }),
+    onPublished: function onPublished() {
+      var _this3 = this;
+
+      this.$confirm("Apakah anda yakin publish postingan ?", "Konfirmasi", {
+        confirmButtonText: "Publish",
+        cancelButtonText: "Batal",
+        type: "warning"
+      }).then(function (result) {
+        _this3.data_post.status = "publish";
+        _this3.loading = true;
+        axios.put(route("api.post.status-change", {
+          post: _this3.$route.params.post
+        }), _this3.data_post).then(function (response) {
+          _this3.loading = false;
+
+          _this3.$notify({
+            title: "Pemberitahuan",
+            message: response.data.message,
+            type: "success"
+          });
+        })["catch"](function () {
+          return _this3.loading = false;
+        });
+      });
+    },
+    onDraft: function onDraft() {
+      var _this4 = this;
+
+      this.$confirm("Apakah anda yakin mendraft postingan ?", "Konfirmasi", {
+        confirmButtonText: "Draft",
+        cancelButtonText: "Batal",
+        type: "warning"
+      }).then(function (result) {
+        _this4.data_post.status = "draft";
+        _this4.loading = true;
+        axios.put(route("api.post.status-change", {
+          post: _this4.$route.params.post
+        }), _this4.data_post).then(function (response) {
+          _this4.loading = false;
+
+          _this4.$notify({
+            title: "Pemberitahuan",
+            message: response.data.message,
+            type: "success"
+          });
+        })["catch"](function () {
+          return _this4.loading = false;
+        });
+      });
+    },
+    onSubmitSetting: function onSubmitSetting(post) {
+      this.data_post = post;
+    }
   },
   mounted: function mounted() {
     if (typeof this.$route.params.post != "undefined") {
@@ -4324,16 +4393,22 @@ __webpack_require__.r(__webpack_exports__);
     onDelete: function onDelete(row) {
       var _this2 = this;
 
-      axios["delete"](route("api.post.destroy", {
-        post: row.id
-      })).then(function (response) {
-        _this2.$notify({
-          title: "Pemberitahuan",
-          message: response.data.message,
-          type: "success"
-        });
+      this.$confirm("Apakah anda yakin ?", "Konfirmasi", {
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+        type: "warning"
+      }).then(function (result) {
+        axios["delete"](route("api.post.destroy", {
+          post: row.id
+        })).then(function (response) {
+          _this2.$notify({
+            title: "Pemberitahuan",
+            message: response.data.message,
+            type: "success"
+          });
 
-        _this2.fetchData();
+          _this2.fetchData();
+        });
       });
     },
     onCreateDraftPost: function onCreateDraftPost() {
@@ -4361,6 +4436,193 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.fetchData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostSetting.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostSetting.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var form_backend_validation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! form-backend-validation */ "./node_modules/form-backend-validation/dist/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    show: false,
+    post: null
+  },
+  data: function data() {
+    return {
+      drawer: false,
+      direction: "rtl",
+      post_setting: {
+        thumbnail: "",
+        category_id: [],
+        slug: ""
+      },
+      list_categories: [],
+      loading: false,
+      thumbnail: []
+    };
+  },
+  watch: {
+    show: function show(value) {
+      this.drawer = value;
+    },
+    drawer: function drawer(value) {
+      this.$emit("update:show", value);
+    },
+    post: function post(value) {
+      if (value) {
+        this.post_setting.slug = value.slug;
+        this.post_setting.category_id = value.category.map(function (item) {
+          return item.id;
+        });
+
+        if (value.thumbnail) {
+          this.thumbnail = [{
+            name: value.thumbnail.file_name,
+            url: value.thumbnail.original_url
+          }];
+        }
+      }
+    }
+  },
+  methods: {
+    fetchCategory: function fetchCategory() {
+      var _this = this;
+
+      axios.get(route("api.category.index"), {
+        params: {
+          paginate: false
+        }
+      }).then(function (response) {
+        _this.list_categories = response.data.data;
+      });
+    },
+    handlePictureCardPreview: function handlePictureCardPreview(file) {
+      console.log(file);
+    },
+    handleRemove: function handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    onSubmit: function onSubmit() {
+      var _this2 = this;
+
+      this.$confirm("Apakah anda yakin menyimpan settingan ?", "Konfirmasi", {
+        confirmButtonText: "Draft",
+        cancelButtonText: "Batal",
+        type: "warning"
+      }).then(function (result) {
+        _this2.loading = true;
+        var data = _this2.post_setting;
+        data._method = 'PUT';
+        var formData = new form_backend_validation__WEBPACK_IMPORTED_MODULE_0__["default"](_this2.post_setting);
+        formData.post(route("api.post.update", {
+          post: _this2.$route.params.post
+        }), {
+          Headers: 'multipart/form-data'
+        }).then(function (response) {
+          _this2.loading = false;
+          _this2.drawer = false;
+
+          _this2.$notify({
+            title: "Pemberitahuan",
+            message: response.message,
+            type: "success"
+          });
+
+          _this2.$emit("onSubmitSetting", response.data);
+        })["catch"](function (response) {
+          _this2.loading = false;
+        });
+      });
+    },
+    handleChangeThumbnail: function handleChangeThumbnail(file, fileList) {
+      // console.log(file);
+      this.post_setting.thumbnail = file.raw;
+    }
+  },
+  mounted: function mounted() {
+    this.fetchCategory();
+    this.post_setting.slug = this.post.slug;
+
+    if (this.post.thumbnail) {
+      this.thumbnail = [{
+        name: this.post.thumbnail.file_name,
+        url: this.post.thumbnail.original_url
+      }];
+    }
   }
 });
 
@@ -66680,6 +66942,818 @@ exports["default"] = {
 
 /***/ }),
 
+/***/ "./node_modules/form-backend-validation/dist/Errors.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/Errors.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+    value: true
+}));
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Errors = function () {
+    /**
+     * Create a new Errors instance.
+     */
+    function Errors() {
+        var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+        _classCallCheck(this, Errors);
+
+        this.record(errors);
+    }
+
+    /**
+     * Get all the errors.
+     *
+     * @return {object}
+     */
+
+
+    _createClass(Errors, [{
+        key: "all",
+        value: function all() {
+            return this.errors;
+        }
+
+        /**
+         * Determine if any errors exists for the given field or object.
+         *
+         * @param {string} field
+         */
+
+    }, {
+        key: "has",
+        value: function has(field) {
+            var hasError = this.errors.hasOwnProperty(field);
+
+            if (!hasError) {
+                var errors = Object.keys(this.errors).filter(function (e) {
+                    return e.startsWith(field + ".") || e.startsWith(field + "[");
+                });
+
+                hasError = errors.length > 0;
+            }
+
+            return hasError;
+        }
+    }, {
+        key: "first",
+        value: function first(field) {
+            return this.get(field)[0];
+        }
+    }, {
+        key: "get",
+        value: function get(field) {
+            return this.errors[field] || [];
+        }
+
+        /**
+         * Determine if we have any errors.
+         * Or return errors for the given keys.
+         *
+         * @param {array} keys
+         */
+
+    }, {
+        key: "any",
+        value: function any() {
+            var _this = this;
+
+            var keys = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+            if (keys.length === 0) {
+                return Object.keys(this.errors).length > 0;
+            }
+
+            var errors = {};
+
+            keys.forEach(function (key) {
+                return errors[key] = _this.get(key);
+            });
+
+            return errors;
+        }
+
+        /**
+         * Record the new errors.
+         *
+         * @param {object} errors
+         */
+
+    }, {
+        key: "record",
+        value: function record() {
+            var errors = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+            this.errors = errors;
+        }
+
+        /**
+         * Clear a specific field, object or all error fields.
+         *
+         * @param {string|null} field
+         */
+
+    }, {
+        key: "clear",
+        value: function clear(field) {
+            if (!field) {
+                this.errors = {};
+
+                return;
+            }
+
+            var errors = Object.assign({}, this.errors);
+
+            Object.keys(errors).filter(function (e) {
+                return e === field || e.startsWith(field + ".") || e.startsWith(field + "[");
+            }).forEach(function (e) {
+                return delete errors[e];
+            });
+
+            this.errors = errors;
+        }
+    }]);
+
+    return Errors;
+}();
+
+exports["default"] = Errors;
+
+/***/ }),
+
+/***/ "./node_modules/form-backend-validation/dist/Form.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/Form.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+    value: true
+}));
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Errors = __webpack_require__(/*! ./Errors */ "./node_modules/form-backend-validation/dist/Errors.js");
+
+var _Errors2 = _interopRequireDefault(_Errors);
+
+var _util = __webpack_require__(/*! ./util */ "./node_modules/form-backend-validation/dist/util/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Form = function () {
+    /**
+     * Create a new Form instance.
+     *
+     * @param {object} data
+     * @param {object} options
+     */
+    function Form() {
+        var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+        _classCallCheck(this, Form);
+
+        this.processing = false;
+        this.successful = false;
+
+        this.withData(data).withOptions(options).withErrors({});
+    }
+
+    _createClass(Form, [{
+        key: 'withData',
+        value: function withData(data) {
+            if ((0, _util.isArray)(data)) {
+                data = data.reduce(function (carry, element) {
+                    carry[element] = '';
+                    return carry;
+                }, {});
+            }
+
+            this.setInitialValues(data);
+
+            this.errors = new _Errors2.default();
+            this.processing = false;
+            this.successful = false;
+
+            for (var field in data) {
+                (0, _util.guardAgainstReservedFieldName)(field);
+
+                this[field] = data[field];
+            }
+
+            return this;
+        }
+    }, {
+        key: 'withErrors',
+        value: function withErrors(errors) {
+            this.errors = new _Errors2.default(errors);
+
+            return this;
+        }
+    }, {
+        key: 'withOptions',
+        value: function withOptions(options) {
+            this.__options = {
+                resetOnSuccess: true
+            };
+
+            if (options.hasOwnProperty('resetOnSuccess')) {
+                this.__options.resetOnSuccess = options.resetOnSuccess;
+            }
+
+            if (options.hasOwnProperty('onSuccess')) {
+                this.onSuccess = options.onSuccess;
+            }
+
+            if (options.hasOwnProperty('onFail')) {
+                this.onFail = options.onFail;
+            }
+
+            var windowAxios = typeof window === 'undefined' ? false : window.axios;
+
+            this.__http = options.http || windowAxios || __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+            if (!this.__http) {
+                throw new Error('No http library provided. Either pass an http option, or install axios.');
+            }
+
+            return this;
+        }
+
+        /**
+         * Fetch all relevant data for the form.
+         */
+
+    }, {
+        key: 'data',
+        value: function data() {
+            var data = {};
+
+            for (var property in this.initial) {
+                data[property] = this[property];
+            }
+
+            return data;
+        }
+
+        /**
+         * Fetch specific data for the form.
+         *
+         * @param {array} fields
+         * @return {object}
+         */
+
+    }, {
+        key: 'only',
+        value: function only(fields) {
+            var _this = this;
+
+            return fields.reduce(function (filtered, field) {
+                filtered[field] = _this[field];
+                return filtered;
+            }, {});
+        }
+
+        /**
+         * Reset the form fields.
+         */
+
+    }, {
+        key: 'reset',
+        value: function reset() {
+            (0, _util.merge)(this, this.initial);
+
+            this.errors.clear();
+        }
+    }, {
+        key: 'setInitialValues',
+        value: function setInitialValues(values) {
+            this.initial = {};
+
+            (0, _util.merge)(this.initial, values);
+        }
+    }, {
+        key: 'populate',
+        value: function populate(data) {
+            var _this2 = this;
+
+            Object.keys(data).forEach(function (field) {
+                (0, _util.guardAgainstReservedFieldName)(field);
+
+                if (_this2.hasOwnProperty(field)) {
+                    (0, _util.merge)(_this2, _defineProperty({}, field, data[field]));
+                }
+            });
+
+            return this;
+        }
+
+        /**
+         * Clear the form fields.
+         */
+
+    }, {
+        key: 'clear',
+        value: function clear() {
+            for (var field in this.initial) {
+                this[field] = '';
+            }
+
+            this.errors.clear();
+        }
+
+        /**
+         * Send a POST request to the given URL.
+         *
+         * @param {string} url
+         */
+
+    }, {
+        key: 'post',
+        value: function post(url) {
+            return this.submit('post', url);
+        }
+
+        /**
+         * Send a PUT request to the given URL.
+         *
+         * @param {string} url
+         */
+
+    }, {
+        key: 'put',
+        value: function put(url) {
+            return this.submit('put', url);
+        }
+
+        /**
+         * Send a PATCH request to the given URL.
+         *
+         * @param {string} url
+         */
+
+    }, {
+        key: 'patch',
+        value: function patch(url) {
+            return this.submit('patch', url);
+        }
+
+        /**
+         * Send a DELETE request to the given URL.
+         *
+         * @param {string} url
+         */
+
+    }, {
+        key: 'delete',
+        value: function _delete(url) {
+            return this.submit('delete', url);
+        }
+
+        /**
+         * Submit the form.
+         *
+         * @param {string} requestType
+         * @param {string} url
+         */
+
+    }, {
+        key: 'submit',
+        value: function submit(requestType, url) {
+            var _this3 = this;
+
+            this.__validateRequestType(requestType);
+            this.errors.clear();
+            this.processing = true;
+            this.successful = false;
+
+            return new Promise(function (resolve, reject) {
+                _this3.__http[requestType](url, _this3.hasFiles() ? (0, _util.objectToFormData)(_this3.data()) : _this3.data()).then(function (response) {
+                    _this3.processing = false;
+                    _this3.onSuccess(response.data);
+
+                    resolve(response.data);
+                }).catch(function (error) {
+                    _this3.processing = false;
+                    _this3.onFail(error);
+
+                    reject(error);
+                });
+            });
+        }
+
+        /**
+         * @returns {boolean}
+         */
+
+    }, {
+        key: 'hasFiles',
+        value: function hasFiles() {
+            for (var property in this.initial) {
+                if (this.hasFilesDeep(this[property])) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }, {
+        key: 'hasFilesDeep',
+
+
+        /**
+         * @param {Object|Array} object
+         * @returns {boolean}
+         */
+        value: function hasFilesDeep(object) {
+            if (object === null) {
+                return false;
+            }
+
+            if ((typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object') {
+                for (var key in object) {
+                    if (object.hasOwnProperty(key)) {
+                        if (this.hasFilesDeep(object[key])) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (Array.isArray(object)) {
+                for (var _key in object) {
+                    if (object.hasOwnProperty(_key)) {
+                        return this.hasFilesDeep(object[_key]);
+                    }
+                }
+            }
+
+            return (0, _util.isFile)(object);
+        }
+
+        /**
+         * Handle a successful form submission.
+         *
+         * @param {object} data
+         */
+
+    }, {
+        key: 'onSuccess',
+        value: function onSuccess(data) {
+            this.successful = true;
+
+            if (this.__options.resetOnSuccess) {
+                this.reset();
+            }
+        }
+
+        /**
+         * Handle a failed form submission.
+         *
+         * @param {object} data
+         */
+
+    }, {
+        key: 'onFail',
+        value: function onFail(error) {
+            this.successful = false;
+
+            if (error.response && error.response.data.errors) {
+                this.errors.record(error.response.data.errors);
+            }
+        }
+
+        /**
+         * Get the error message(s) for the given field.
+         *
+         * @param field
+         */
+
+    }, {
+        key: 'hasError',
+        value: function hasError(field) {
+            return this.errors.has(field);
+        }
+
+        /**
+         * Get the first error message for the given field.
+         *
+         * @param {string} field
+         * @return {string}
+         */
+
+    }, {
+        key: 'getError',
+        value: function getError(field) {
+            return this.errors.first(field);
+        }
+
+        /**
+         * Get the error messages for the given field.
+         *
+         * @param {string} field
+         * @return {array}
+         */
+
+    }, {
+        key: 'getErrors',
+        value: function getErrors(field) {
+            return this.errors.get(field);
+        }
+    }, {
+        key: '__validateRequestType',
+        value: function __validateRequestType(requestType) {
+            var requestTypes = ['get', 'delete', 'head', 'post', 'put', 'patch'];
+
+            if (requestTypes.indexOf(requestType) === -1) {
+                throw new Error('`' + requestType + '` is not a valid request type, ' + ('must be one of: `' + requestTypes.join('`, `') + '`.'));
+            }
+        }
+    }], [{
+        key: 'create',
+        value: function create() {
+            var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+            return new Form().withData(data);
+        }
+    }]);
+
+    return Form;
+}();
+
+exports["default"] = Form;
+
+/***/ }),
+
+/***/ "./node_modules/form-backend-validation/dist/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/index.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var _Form = __webpack_require__(/*! ./Form */ "./node_modules/form-backend-validation/dist/Form.js");
+
+Object.defineProperty(exports, "default", ({
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Form).default;
+  }
+}));
+Object.defineProperty(exports, "Form", ({
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Form).default;
+  }
+}));
+
+var _Errors = __webpack_require__(/*! ./Errors */ "./node_modules/form-backend-validation/dist/Errors.js");
+
+Object.defineProperty(exports, "Errors", ({
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Errors).default;
+  }
+}));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+
+/***/ "./node_modules/form-backend-validation/dist/util/fieldNameValidation.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/util/fieldNameValidation.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+    value: true
+}));
+exports.guardAgainstReservedFieldName = guardAgainstReservedFieldName;
+var reservedFieldNames = exports.reservedFieldNames = ['__http', '__options', '__validateRequestType', 'clear', 'data', 'delete', 'errors', 'getError', 'getErrors', 'hasError', 'initial', 'onFail', 'only', 'onSuccess', 'patch', 'populate', 'post', 'processing', 'successful', 'put', 'reset', 'submit', 'withData', 'withErrors', 'withOptions'];
+
+function guardAgainstReservedFieldName(fieldName) {
+    if (reservedFieldNames.indexOf(fieldName) !== -1) {
+        throw new Error('Field name ' + fieldName + ' isn\'t allowed to be used in a Form or Errors instance.');
+    }
+}
+
+/***/ }),
+
+/***/ "./node_modules/form-backend-validation/dist/util/formData.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/util/formData.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+    value: true
+}));
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.objectToFormData = objectToFormData;
+function objectToFormData(object) {
+    var formData = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new FormData();
+    var parent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    if (object === null || object === 'undefined' || object.length === 0) {
+        return formData.append(parent, object);
+    }
+
+    for (var property in object) {
+        if (object.hasOwnProperty(property)) {
+            appendToFormData(formData, getKey(parent, property), object[property]);
+        }
+    }
+
+    return formData;
+}
+
+function getKey(parent, property) {
+    return parent ? parent + '[' + property + ']' : property;
+}
+
+function appendToFormData(formData, key, value) {
+    if (value instanceof Date) {
+        return formData.append(key, value.toISOString());
+    }
+
+    if (value instanceof File) {
+        return formData.append(key, value, value.name);
+    }
+
+    if (typeof value === "boolean") {
+        return formData.append(key, value ? '1' : '0');
+    }
+
+    if (value === null) {
+        return formData.append(key, '');
+    }
+
+    if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) !== 'object') {
+        return formData.append(key, value);
+    }
+
+    objectToFormData(value, formData, key);
+}
+
+/***/ }),
+
+/***/ "./node_modules/form-backend-validation/dist/util/index.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/util/index.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var _objects = __webpack_require__(/*! ./objects */ "./node_modules/form-backend-validation/dist/util/objects.js");
+
+Object.keys(_objects).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _objects[key];
+    }
+  });
+});
+
+var _formData = __webpack_require__(/*! ./formData */ "./node_modules/form-backend-validation/dist/util/formData.js");
+
+Object.keys(_formData).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _formData[key];
+    }
+  });
+});
+
+var _fieldNameValidation = __webpack_require__(/*! ./fieldNameValidation */ "./node_modules/form-backend-validation/dist/util/fieldNameValidation.js");
+
+Object.keys(_fieldNameValidation).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _fieldNameValidation[key];
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./node_modules/form-backend-validation/dist/util/objects.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/form-backend-validation/dist/util/objects.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+    value: true
+}));
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.isArray = isArray;
+exports.isFile = isFile;
+exports.merge = merge;
+exports.cloneDeep = cloneDeep;
+function isArray(object) {
+    return Object.prototype.toString.call(object) === '[object Array]';
+}
+
+function isFile(object) {
+    return object instanceof File || object instanceof FileList;
+}
+
+function merge(a, b) {
+    for (var key in b) {
+        a[key] = cloneDeep(b[key]);
+    }
+}
+
+function cloneDeep(object) {
+    if (object === null) {
+        return null;
+    }
+
+    if (isFile(object)) {
+        return object;
+    }
+
+    if (Array.isArray(object)) {
+        var clone = [];
+
+        for (var key in object) {
+            if (object.hasOwnProperty(key)) {
+                clone[key] = cloneDeep(object[key]);
+            }
+        }
+
+        return clone;
+    }
+
+    if ((typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object') {
+        var _clone = {};
+
+        for (var _key in object) {
+            if (object.hasOwnProperty(_key)) {
+                _clone[_key] = cloneDeep(object[_key]);
+            }
+        }
+
+        return _clone;
+    }
+
+    return object;
+}
+
+/***/ }),
+
 /***/ "./node_modules/lodash/lodash.js":
 /*!***************************************!*\
   !*** ./node_modules/lodash/lodash.js ***!
@@ -86555,6 +87629,45 @@ component.options.__file = "resources/js/modules/Post/components/PostList.vue"
 
 /***/ }),
 
+/***/ "./resources/js/modules/Post/components/PostSetting.vue":
+/*!**************************************************************!*\
+  !*** ./resources/js/modules/Post/components/PostSetting.vue ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _PostSetting_vue_vue_type_template_id_56dbdb90___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PostSetting.vue?vue&type=template&id=56dbdb90& */ "./resources/js/modules/Post/components/PostSetting.vue?vue&type=template&id=56dbdb90&");
+/* harmony import */ var _PostSetting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PostSetting.vue?vue&type=script&lang=js& */ "./resources/js/modules/Post/components/PostSetting.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PostSetting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PostSetting_vue_vue_type_template_id_56dbdb90___WEBPACK_IMPORTED_MODULE_0__.render,
+  _PostSetting_vue_vue_type_template_id_56dbdb90___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/modules/Post/components/PostSetting.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/modules/Role/components/DialogPermission.vue":
 /*!*******************************************************************!*\
   !*** ./resources/js/modules/Role/components/DialogPermission.vue ***!
@@ -86891,6 +88004,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/modules/Post/components/PostSetting.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/modules/Post/components/PostSetting.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PostSetting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostSetting.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostSetting.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PostSetting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/modules/Role/components/DialogPermission.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************!*\
   !*** ./resources/js/modules/Role/components/DialogPermission.vue?vue&type=script&lang=js& ***!
@@ -87184,6 +88313,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostList_vue_vue_type_template_id_8e853ae4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostList_vue_vue_type_template_id_8e853ae4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostList.vue?vue&type=template&id=8e853ae4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostList.vue?vue&type=template&id=8e853ae4&");
+
+
+/***/ }),
+
+/***/ "./resources/js/modules/Post/components/PostSetting.vue?vue&type=template&id=56dbdb90&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/modules/Post/components/PostSetting.vue?vue&type=template&id=56dbdb90& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostSetting_vue_vue_type_template_id_56dbdb90___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostSetting_vue_vue_type_template_id_56dbdb90___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PostSetting_vue_vue_type_template_id_56dbdb90___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PostSetting.vue?vue&type=template&id=56dbdb90& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostSetting.vue?vue&type=template&id=56dbdb90&");
 
 
 /***/ }),
@@ -87999,6 +89145,11 @@ var render = function () {
                           type: "plain",
                           icon: "el-icon-setting",
                         },
+                        on: {
+                          click: function ($event) {
+                            _vm.dialog_setting = true
+                          },
+                        },
                       },
                       [_vm._v("Pengaturan")]
                     ),
@@ -88019,6 +89170,7 @@ var render = function () {
                           type: "warning",
                           icon: "el-icon-document",
                         },
+                        on: { click: _vm.onDraft },
                       },
                       [_vm._v("Draft")]
                     ),
@@ -88031,6 +89183,7 @@ var render = function () {
                           type: "primary",
                           icon: "el-icon-upload2",
                         },
+                        on: { click: _vm.onPublished },
                       },
                       [_vm._v("Publish")]
                     ),
@@ -88086,6 +89239,16 @@ var render = function () {
           ]),
         ]
       ),
+      _vm._v(" "),
+      _c("post-setting", {
+        attrs: { show: _vm.dialog_setting, post: _vm.data_post },
+        on: {
+          "update:show": function ($event) {
+            _vm.dialog_setting = $event
+          },
+          onSubmitSetting: _vm.onSubmitSetting,
+        },
+      }),
     ],
     1
   )
@@ -88419,6 +89582,174 @@ var staticRenderFns = [
     )
   },
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostSetting.vue?vue&type=template&id=56dbdb90&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/modules/Post/components/PostSetting.vue?vue&type=template&id=56dbdb90& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "el-drawer",
+    {
+      directives: [
+        {
+          name: "loading",
+          rawName: "v-loading",
+          value: _vm.loading,
+          expression: "loading",
+        },
+      ],
+      ref: "drawer",
+      attrs: {
+        title: "Pengaturan Postingan",
+        visible: _vm.drawer,
+        direction: _vm.direction,
+        "close-on-press-escape": false,
+        wrapperClosable: false,
+        "custom-class": "demo-drawer",
+      },
+      on: {
+        "update:visible": function ($event) {
+          _vm.drawer = $event
+        },
+      },
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "demo-drawer__content p-3" },
+        [
+          _c(
+            "el-form",
+            {
+              ref: "postSetting",
+              attrs: {
+                model: _vm.post_setting,
+                size: "mini",
+                "label-position": "top",
+              },
+            },
+            [
+              _c(
+                "el-form-item",
+                { attrs: { label: "Url Postingan", prop: "thumbnail" } },
+                [
+                  _c("el-input", {
+                    attrs: { placeholder: "Cth : link-postingan-saya" },
+                    model: {
+                      value: _vm.post_setting.slug,
+                      callback: function ($$v) {
+                        _vm.$set(_vm.post_setting, "slug", $$v)
+                      },
+                      expression: "post_setting.slug",
+                    },
+                  }),
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "Upload Thumbnail", prop: "thumbnail" } },
+                [
+                  _c(
+                    "el-upload",
+                    {
+                      attrs: {
+                        "auto-upload": false,
+                        action: "#",
+                        "list-type": "picture-card",
+                        "on-preview": _vm.handlePictureCardPreview,
+                        "on-remove": _vm.handleRemove,
+                        limit: 1,
+                        "on-change": _vm.handleChangeThumbnail,
+                        "file-list": _vm.thumbnail,
+                      },
+                    },
+                    [_c("i", { staticClass: "el-icon-plus" })]
+                  ),
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                { attrs: { label: "Kategori Postingan", prop: "thumbnail" } },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { multiple: "", filterable: "", clearble: "" },
+                      model: {
+                        value: _vm.post_setting.category_id,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.post_setting, "category_id", $$v)
+                        },
+                        expression: "post_setting.category_id",
+                      },
+                    },
+                    _vm._l(_vm.list_categories, function (item, index) {
+                      return _c("el-option", {
+                        key: index,
+                        attrs: { label: item.name, value: item.id },
+                      })
+                    }),
+                    1
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "demo-drawer__footer" },
+            [
+              _c(
+                "el-button",
+                {
+                  on: {
+                    click: function ($event) {
+                      _vm.drawer = false
+                    },
+                  },
+                },
+                [_vm._v("Batal")]
+              ),
+              _vm._v(" "),
+              _c(
+                "el-button",
+                { attrs: { type: "primary" }, on: { click: _vm.onSubmit } },
+                [_vm._v("Simpan")]
+              ),
+            ],
+            1
+          ),
+        ],
+        1
+      ),
+    ]
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

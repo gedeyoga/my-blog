@@ -18,11 +18,14 @@ class PostTransformer extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'article' => $this->article,
-            'created_by' => new UserTransformer($this->user_created),
+            'slug' => $this->slug,
+            'created_by' => $this->created_by,
+            'writer' => new UserTransformer($this->user_created),
             'status' => $this->status,
             'category' => CategoryTransformer::collection($this->category),
             'updated_at' => date('Y-m-d H:i:s' , strtotime($this->updated_at)),
-            'created_at' => date('Y-m-d H:i:s', strtotime($this->created_at))
+            'created_at' => date('Y-m-d H:i:s', strtotime($this->created_at)),
+            'thumbnail' => $this->getFirstMedia('thumbnail_post') ? $this->getFirstMedia('thumbnail_post') : null,
         ];
     }
 }

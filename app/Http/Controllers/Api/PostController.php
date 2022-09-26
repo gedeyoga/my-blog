@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PostTransformer;
 use App\Models\Post;
 use App\Repositories\PostRepository;
+use App\Services\MediaService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -35,8 +36,6 @@ class PostController extends Controller
         $post_repo = app(PostRepository::class);
 
         $data = $request->except('thumbnail');
-
-        dd($data);
 
         $post = $post_repo->createPost($data);
 
@@ -68,13 +67,17 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $post_repo = app(PostRepository::class);
-
         $data = $request->except('thumbnail');
 
+        
         $post = $post_repo->updatePost($post , $data);
 
+        if($request->hasFile('thumbnail')) {
+            $post->addMediaFromRequest('thumbnail')->toMediaCollection('thumbnail_post');
+        }
+
         return response()->json([
-            'message' => 'Berhasil menambahkan postingan!',
+            'message' => 'Berhasil memperbahrui postingan!',
             'data' => new PostTransformer($post)
         ]);
     }
@@ -93,6 +96,24 @@ class PostController extends Controller
 
         return response()->json([
             'message' => 'Berhasil menghapus postingan!'
+        ]);
+    }
+
+    public function statusChange( Post $post , Request $request)
+    {
+        $data = $request->all();
+        
+        $post_repo = app(PostRepository::class);
+
+        $post = $post_repo->statusChange($post, $data);
+
+        $message = [
+            'publish' => 'Berhasil mempublish postingan!',
+            'draft' => 'Berhasil mendraft postingan!',
+        ];
+
+        return response()->json([
+            'message' => $message[$post->status],
         ]);
     }
 }

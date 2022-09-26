@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Events\PostIsCreated;
 use App\Events\PostIsUpdated;
+use App\Events\PostWasPublished;
 use App\Models\Post;
 use App\Repositories\PostRepository;
 use Illuminate\Http\Request;
@@ -82,13 +83,24 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
 
     public function assignCategory(Post $post , array $category_ids)
     {
-        $post->category()->delete();
+        $post->post_category()->delete();
 
         foreach ($category_ids as $category_id) {
 
             $post->category()->attach($category_id);
         }
 
+        return $post;
+    }
+
+    public function statusChange( Post $post , $data)
+    {
+        $post = $this->update($post , $data);
+
+        if($post->status == 'publish') {
+            event(new PostWasPublished($post));
+        }
+        
         return $post;
     }
     

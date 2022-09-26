@@ -42,5 +42,6 @@ Route::group(['middleware' => 'auth:sanctum'] , function() {
 
     Route::prefix('categories')->apiResource('category', CategoryController::class, ['as' => 'api']);
     Route::prefix('posts')->apiResource('post', PostController::class, ['as' => 'api']);
+    Route::put('/post/{post}/status' , [PostController::class , 'statusChange'])->name('api.post.status-change');
     
 });

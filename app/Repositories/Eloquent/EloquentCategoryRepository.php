@@ -11,15 +11,19 @@ class EloquentCategoryRepository extends EloquentBaseRepository implements Categ
 
     public function listCategories(Request $request)
     {
-        $users = $this->model;
+        $categories = $this->model;
 
         if($request->get('search')) {
-            $users = $users->where(function($query) use ($request) {
+            $categories = $categories->where(function($query) use ($request) {
                 $query->where('name' , 'like' , '%'.$request->get('search').'%');
             });
         }
 
-        return $users->paginate($request->get('per_page' , 10));
+        if(!is_null($request->get('paginate'))) {
+            return $categories->get();
+        }
+
+        return $categories->paginate($request->get('per_page' , 10));
     }
     
 }

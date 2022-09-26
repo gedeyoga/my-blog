@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes , InteractsWithMedia;
 
     protected $fillable = [
         'slug', 'title', 'article', 'status', 'created_by'
@@ -38,5 +40,14 @@ class Post extends Model
     public function user_created()
     {
         return $this->belongsTo(User::class , 'created_by');
+    }
+
+    public function post_category() {
+        return $this->hasMany(PostCategory::class , 'post_id');
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('thumbnail_post')->singleFile();
     }
 }

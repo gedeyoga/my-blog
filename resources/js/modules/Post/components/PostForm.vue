@@ -23,6 +23,7 @@
                             size="small"
                             type="plain"
                             icon="el-icon-setting"
+                            @click="dialog_setting = true"
                             >Pengaturan</el-button
                         >
                         <el-button
@@ -30,12 +31,14 @@
                             type="warning"
                             icon="el-icon-document"
                             v-loading="loading"
+                            @click="onDraft"
                             >Draft</el-button
                         >
                         <el-button
                             size="small"
                             type="primary"
                             icon="el-icon-upload2"
+                            @click="onPublished"
                             >Publish</el-button
                         >
                     </el-button-group>
@@ -60,19 +63,31 @@
                 </div>
             </div>
         </el-form>
+
+        <post-setting
+            :show.sync="dialog_setting"
+            :post="data_post"
+            @onSubmitSetting="onSubmitSetting"
+        ></post-setting>
     </div>
 </template>
 
 <script>
 import _ from "lodash";
+import PostSetting from "./PostSetting.vue";
 
 export default {
+    components: {
+        PostSetting,
+    },
     data() {
         return {
             data_post: {
+                id: null,
                 title: "",
                 article: "",
                 created_by: null,
+                status: "draft",
             },
             editorConfig: {
                 // The configuration of the editor.
@@ -89,13 +104,13 @@ export default {
                     { required: true, message: "Deskripsi tidak boleh kosong" },
                 ],
             },
+
+            dialog_setting: false,
         };
     },
     methods: {
-        onSubmit() {
+        onSubmit(callback) {
             this.loading = true;
-            let data = this.data_post;
-            data.created_by = this.user.id;
 
             axios
                 .put(
@@ -106,6 +121,8 @@ export default {
                 )
                 .then((response) => {
                     this.loading = false;
+
+                    callback(response);
                 })
                 .catch((response) => {
                     this.loading = false;
@@ -128,6 +145,72 @@ export default {
         onEditPost: _.debounce(function () {
             this.onSubmit();
         }),
+
+        onPublished() {
+            this.$confirm(
+                "Apakah anda yakin publish postingan ?",
+                "Konfirmasi",
+                {
+                    confirmButtonText: "Publish",
+                    cancelButtonText: "Batal",
+                    type: "warning",
+                }
+            ).then((result) => {
+                this.data_post.status = "publish";
+                this.loading = true;
+                axios
+                    .put(
+                        route("api.post.status-change", {
+                            post: this.$route.params.post,
+                        }),
+                        this.data_post
+                    )
+                    .then((response) => {
+                        this.loading = false;
+                        this.$notify({
+                            title: "Pemberitahuan",
+                            message: response.data.message,
+                            type: "success",
+                        });
+                    })
+                    .catch(() => (this.loading = false));
+            });
+        },
+
+        onDraft() {
+            this.$confirm(
+                "Apakah anda yakin mendraft postingan ?",
+                "Konfirmasi",
+                {
+                    confirmButtonText: "Draft",
+                    cancelButtonText: "Batal",
+                    type: "warning",
+                }
+            ).then((result) => {
+                this.data_post.status = "draft";
+                this.loading = true;
+                axios
+                    .put(
+                        route("api.post.status-change", {
+                            post: this.$route.params.post,
+                        }),
+                        this.data_post
+                    )
+                    .then((response) => {
+                        this.loading = false;
+                        this.$notify({
+                            title: "Pemberitahuan",
+                            message: response.data.message,
+                            type: "success",
+                        });
+                    })
+                    .catch(() => (this.loading = false));
+            });
+        },
+
+        onSubmitSetting(post) {
+            this.data_post = post;
+        }
     },
 
     mounted() {

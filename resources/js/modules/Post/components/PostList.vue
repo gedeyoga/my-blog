@@ -217,21 +217,27 @@ export default {
         },
 
         onDelete(row) {
-            axios
-                .delete(
-                    route("api.post.destroy", {
-                        post: row.id,
-                    })
-                )
-                .then((response) => {
-                    this.$notify({
-                        title: "Pemberitahuan",
-                        message: response.data.message,
-                        type: "success",
+            this.$confirm("Apakah anda yakin ?", "Konfirmasi", {
+                confirmButtonText: "Hapus",
+                cancelButtonText: "Batal",
+                type: "warning",
+            }).then((result) => {
+                axios
+                    .delete(
+                        route("api.post.destroy", {
+                            post: row.id,
+                        })
+                    )
+                    .then((response) => {
+                        this.$notify({
+                            title: "Pemberitahuan",
+                            message: response.data.message,
+                            type: "success",
+                        });
+    
+                        this.fetchData();
                     });
-
-                    this.fetchData();
-                });
+            })
         },
 
         onCreateDraftPost() {
