@@ -30,6 +30,7 @@
     "dependencies": {
         "autoprefixer": "10.4.5",
         "ckeditor4-vue": "^2.1.1",
-        "form-backend-validation": "^2.4.0"
+        "form-backend-validation": "^2.4.0",
+        "image-preview-vue": "^1.2.11"
     }
 }

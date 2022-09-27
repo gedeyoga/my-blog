@@ -12,6 +12,8 @@ import Vue from "vue";
 import App from "./components/core/App";
 import routes from "./routes";
 import CKEditor from "ckeditor4-vue";
+import imagePreview from "image-preview-vue";
+import "image-preview-vue/lib/imagepreviewvue.css";
 
 window.axios = require("axios");
 
@@ -43,6 +45,7 @@ if (userApiToken) {
 
 Vue.use(ElementUI, { locale });
 Vue.use(CKEditor);
+Vue.use(imagePreview);
 
 let base_url = document.head.querySelector('meta[name="base-url"]');
 

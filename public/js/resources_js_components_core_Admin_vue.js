@@ -266,6 +266,15 @@ __webpack_require__.r(__webpack_exports__);
     return {
       user: window.admin_panel.user
     };
+  },
+  methods: {
+    previewImage: function previewImage(url_image) {
+      this.$imagePreview({
+        initIndex: 0,
+        images: url_image,
+        zIndex: 999999999999999
+      });
+    }
   }
 });
 

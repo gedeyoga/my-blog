@@ -125,7 +125,8 @@ export default {
         },
 
         handlePictureCardPreview(file) {
-            console.log(file);
+            let image = [file.url];
+            this.previewImage(image);
         },
 
         handleRemove(file, fileList) {

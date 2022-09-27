@@ -32,6 +32,10 @@ Route::group(['prefix' => 'admin' , 'middleware' => 'auth'] , function() {
     //Post
     Route::get('/posts' , [PostController::class, 'index'])->name('posts.index');
     Route::get('/posts/{post}/draft' , [PostController::class , 'draft'])->name('posts.draft');
+
+    Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+        \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
 });
 
 Route::group(['prefix' => 'auth'] , function() {

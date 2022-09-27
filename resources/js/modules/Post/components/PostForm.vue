@@ -81,6 +81,9 @@ export default {
         PostSetting,
     },
     data() {
+
+        let token = this.$csrfToken.content
+        let url = this.$url;
         return {
             data_post: {
                 id: null,
@@ -90,7 +93,10 @@ export default {
                 status: "draft",
             },
             editorConfig: {
-                // The configuration of the editor.
+                filebrowserImageBrowseUrl: url +"/admin/laravel-filemanager?type=Images",
+                filebrowserImageUploadUrl: url +"/admin/laravel-filemanager/upload?type=Images&_token=" + token,
+                filebrowserBrowseUrl: url +"/admin/laravel-filemanager?type=Files",
+                filebrowserUploadUrl: url +"/admin/laravel-filemanager/upload?type=Files&_token=" +token,
             },
             loading: false,
             rules: {
@@ -143,7 +149,9 @@ export default {
         },
 
         onEditPost: _.debounce(function () {
-            this.onSubmit();
+            this.onSubmit((response) => {
+                this.data_post = response.data.data;
+            });
         }),
 
         onPublished() {
@@ -210,7 +218,7 @@ export default {
 
         onSubmitSetting(post) {
             this.data_post = post;
-        }
+        },
     },
 
     mounted() {
