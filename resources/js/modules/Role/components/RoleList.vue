@@ -18,6 +18,7 @@
             >
                 <span>List Role</span>
                 <el-button
+                    v-if="hasAccess('role.role-create')"
                     type="primary"
                     size="small"
                     icon="fas fa-plus"
@@ -84,6 +85,7 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button
+                                    v-if="hasAccess('role.role-update')"
                                     type="primary"
                                     size="small"
                                     icon="el-icon-edit"
@@ -97,6 +99,7 @@
                                     "
                                 ></el-button>
                                 <el-button
+                                    v-if="hasAccess('role.role-delete')"
                                     size="small"
                                     type="danger"
                                     plain

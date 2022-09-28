@@ -33,6 +33,12 @@
         <!-- Divider -->
         <hr class="sidebar-divider" />
 
+        <template
+            v-if="
+                hasAccess('role.role-list') || 
+                hasAccess('user.user-list')
+            "
+        >
         <!-- Heading -->
         <div class="sidebar-heading">Master Data</div>
 
@@ -58,12 +64,14 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Manajemen User</h6>
                     <a
+                        v-if="hasAccess('user.user-list')"
                         class="collapse-item"
                         href="#"
                         @click.prevent="$router.push({ name: 'users.index' })"
                         >User</a
                     >
                     <a
+                        v-if="hasAccess('role.role-list')"
                         class="collapse-item"
                         href="#"
                         @click.prevent="$router.push({ name: 'roles.index' })"
@@ -72,7 +80,13 @@
                 </div>
             </div>
         </li>
+        </template>
 
+        <template
+            v-if="
+                hasAccess('category.category-list')
+            "
+        >
         <!-- Heading -->
         <div class="sidebar-heading">Manajemen Content</div>
 
@@ -98,6 +112,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Manajemen Content</h6>
                     <a
+                        v-if="hasAccess('post.post-list')"
                         class="collapse-item"
                         href="#"
                         @click.prevent="
@@ -106,6 +121,7 @@
                         >Postingan</a
                     >
                     <a
+                        v-if="hasAccess('category.category-list')"
                         class="collapse-item"
                         href="#"
                         @click.prevent="
@@ -116,6 +132,7 @@
                 </div>
             </div>
         </li>
+        </template>
 
         <!-- Sidebar Message -->
         <div class="sidebar-card d-none d-lg-flex">

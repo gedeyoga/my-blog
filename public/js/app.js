@@ -3845,6 +3845,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -4184,6 +4187,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5215,6 +5227,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5826,6 +5841,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
 //
 //
 //
@@ -88900,18 +88917,24 @@ var render = function () {
         [
           _c("span", [_vm._v("List Kategori")]),
           _vm._v(" "),
-          _c(
-            "el-button",
-            {
-              attrs: { type: "primary", size: "small", icon: "fas fa-plus" },
-              on: {
-                click: function ($event) {
-                  return _vm.$router.push({ name: "categories.create" })
+          _vm.hasAccess("category.category-create")
+            ? _c(
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    size: "small",
+                    icon: "fas fa-plus",
+                  },
+                  on: {
+                    click: function ($event) {
+                      return _vm.$router.push({ name: "categories.create" })
+                    },
+                  },
                 },
-              },
-            },
-            [_vm._v("Tambah Kategori")]
-          ),
+                [_vm._v("Tambah Kategori")]
+              )
+            : _vm._e(),
         ],
         1
       ),
@@ -89063,37 +89086,41 @@ var render = function () {
                         _c(
                           "el-button-group",
                           [
-                            _c("el-button", {
-                              attrs: {
-                                type: "primary",
-                                size: "small",
-                                icon: "el-icon-edit",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.$router.push({
-                                    name: "categories.edit",
-                                    params: {
-                                      category: scope.row.id,
+                            _vm.hasAccess("category.category-update")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    type: "primary",
+                                    size: "small",
+                                    icon: "el-icon-edit",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.$router.push({
+                                        name: "categories.edit",
+                                        params: {
+                                          category: scope.row.id,
+                                        },
+                                      })
                                     },
-                                  })
-                                },
-                              },
-                            }),
+                                  },
+                                })
+                              : _vm._e(),
                             _vm._v(" "),
-                            _c("el-button", {
-                              attrs: {
-                                size: "small",
-                                type: "danger",
-                                plain: "",
-                                icon: "el-icon-delete",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.onDelete(scope.row)
-                                },
-                              },
-                            }),
+                            _vm.hasAccess("category.category-delete")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    size: "small",
+                                    type: "danger",
+                                    plain: "",
+                                    icon: "el-icon-delete",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.onDelete(scope.row)
+                                    },
+                                  },
+                                })
+                              : _vm._e(),
                           ],
                           1
                         ),
@@ -89432,22 +89459,28 @@ var render = function () {
         [
           _c("span", [_vm._v("List Postingan")]),
           _vm._v(" "),
-          _c(
-            "el-button",
-            {
-              directives: [
+          _vm.hasAccess("post.post-create")
+            ? _c(
+                "el-button",
                 {
-                  name: "loading",
-                  rawName: "v-loading",
-                  value: _vm.loading_draft,
-                  expression: "loading_draft",
+                  directives: [
+                    {
+                      name: "loading",
+                      rawName: "v-loading",
+                      value: _vm.loading_draft,
+                      expression: "loading_draft",
+                    },
+                  ],
+                  attrs: {
+                    type: "primary",
+                    size: "small",
+                    icon: "fas fa-plus",
+                  },
+                  on: { click: _vm.onCreateDraftPost },
                 },
-              ],
-              attrs: { type: "primary", size: "small", icon: "fas fa-plus" },
-              on: { click: _vm.onCreateDraftPost },
-            },
-            [_vm._v("Tambah Postingan")]
-          ),
+                [_vm._v("Tambah Postingan")]
+              )
+            : _vm._e(),
         ],
         1
       ),
@@ -89535,6 +89568,28 @@ var render = function () {
             },
             [
               _c("el-table-column", {
+                attrs: { prop: "name", label: "Thubmnail", width: "120px" },
+                scopedSlots: _vm._u([
+                  {
+                    key: "default",
+                    fn: function (scope) {
+                      return [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          attrs: {
+                            src: scope.row.thumbnail
+                              ? scope.row.thumbnail.original_url
+                              : "#",
+                            alt: "",
+                          },
+                        }),
+                      ]
+                    },
+                  },
+                ]),
+              }),
+              _vm._v(" "),
+              _c("el-table-column", {
                 attrs: { prop: "name", label: "Postingan" },
                 scopedSlots: _vm._u([
                   {
@@ -89562,9 +89617,25 @@ var render = function () {
                                 _vm._v(
                                   "\n                            " +
                                     _vm._s(scope.row.title) +
-                                    "\n                        "
+                                    " "
                                 ),
-                              ]
+                                _c("br"),
+                                _vm._v(" "),
+                                _vm._l(
+                                  scope.row.category,
+                                  function (item, index) {
+                                    return _c(
+                                      "span",
+                                      {
+                                        key: index,
+                                        staticClass: "badge badge-primary mr-1",
+                                      },
+                                      [_c("small", [_vm._v(_vm._s(item.name))])]
+                                    )
+                                  }
+                                ),
+                              ],
+                              2
                             )
                           : _c("span", { staticClass: "text-warning" }, [
                               _c("i", [_vm._v("(Judul belum dibuat)")]),
@@ -89611,37 +89682,41 @@ var render = function () {
                         _c(
                           "el-button-group",
                           [
-                            _c("el-button", {
-                              attrs: {
-                                type: "primary",
-                                size: "small",
-                                icon: "el-icon-edit",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.$router.push({
-                                    name: "posts.draft",
-                                    params: {
-                                      post: scope.row.id,
+                            _vm.hasAccess("post.post-update")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    type: "primary",
+                                    size: "small",
+                                    icon: "el-icon-edit",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.$router.push({
+                                        name: "posts.draft",
+                                        params: {
+                                          post: scope.row.id,
+                                        },
+                                      })
                                     },
-                                  })
-                                },
-                              },
-                            }),
+                                  },
+                                })
+                              : _vm._e(),
                             _vm._v(" "),
-                            _c("el-button", {
-                              attrs: {
-                                size: "small",
-                                type: "danger",
-                                plain: "",
-                                icon: "el-icon-delete",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.onDelete(scope.row)
-                                },
-                              },
-                            }),
+                            _vm.hasAccess("post.post-delete")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    size: "small",
+                                    type: "danger",
+                                    plain: "",
+                                    icon: "el-icon-delete",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.onDelete(scope.row)
+                                    },
+                                  },
+                                })
+                              : _vm._e(),
                           ],
                           1
                         ),
@@ -90371,18 +90446,24 @@ var render = function () {
         [
           _c("span", [_vm._v("List Role")]),
           _vm._v(" "),
-          _c(
-            "el-button",
-            {
-              attrs: { type: "primary", size: "small", icon: "fas fa-plus" },
-              on: {
-                click: function ($event) {
-                  return _vm.$router.push({ name: "roles.create" })
+          _vm.hasAccess("role.role-create")
+            ? _c(
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    size: "small",
+                    icon: "fas fa-plus",
+                  },
+                  on: {
+                    click: function ($event) {
+                      return _vm.$router.push({ name: "roles.create" })
+                    },
+                  },
                 },
-              },
-            },
-            [_vm._v("Tambah Role")]
-          ),
+                [_vm._v("Tambah Role")]
+              )
+            : _vm._e(),
         ],
         1
       ),
@@ -90534,37 +90615,41 @@ var render = function () {
                         _c(
                           "el-button-group",
                           [
-                            _c("el-button", {
-                              attrs: {
-                                type: "primary",
-                                size: "small",
-                                icon: "el-icon-edit",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.$router.push({
-                                    name: "roles.edit",
-                                    params: {
-                                      role: scope.row.id,
+                            _vm.hasAccess("role.role-update")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    type: "primary",
+                                    size: "small",
+                                    icon: "el-icon-edit",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.$router.push({
+                                        name: "roles.edit",
+                                        params: {
+                                          role: scope.row.id,
+                                        },
+                                      })
                                     },
-                                  })
-                                },
-                              },
-                            }),
+                                  },
+                                })
+                              : _vm._e(),
                             _vm._v(" "),
-                            _c("el-button", {
-                              attrs: {
-                                size: "small",
-                                type: "danger",
-                                plain: "",
-                                icon: "el-icon-delete",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.onDelete(scope.row)
-                                },
-                              },
-                            }),
+                            _vm.hasAccess("role.role-delete")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    size: "small",
+                                    type: "danger",
+                                    plain: "",
+                                    icon: "el-icon-delete",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.onDelete(scope.row)
+                                    },
+                                  },
+                                })
+                              : _vm._e(),
                           ],
                           1
                         ),
@@ -91142,18 +91227,24 @@ var render = function () {
         [
           _c("span", [_vm._v("List User")]),
           _vm._v(" "),
-          _c(
-            "el-button",
-            {
-              attrs: { type: "primary", size: "small", icon: "fas fa-plus" },
-              on: {
-                click: function ($event) {
-                  return _vm.$router.push({ name: "users.create" })
+          _vm.hasAccess("user.user-list")
+            ? _c(
+                "el-button",
+                {
+                  attrs: {
+                    type: "primary",
+                    size: "small",
+                    icon: "fas fa-plus",
+                  },
+                  on: {
+                    click: function ($event) {
+                      return _vm.$router.push({ name: "users.create" })
+                    },
+                  },
                 },
-              },
-            },
-            [_vm._v("Tambah User")]
-          ),
+                [_vm._v("Tambah User")]
+              )
+            : _vm._e(),
         ],
         1
       ),
@@ -91359,25 +91450,28 @@ var render = function () {
                         _c(
                           "el-button-group",
                           [
-                            _c("el-button", {
-                              attrs: {
-                                type: "primary",
-                                size: "small",
-                                icon: "el-icon-edit",
-                              },
-                              on: {
-                                click: function ($event) {
-                                  return _vm.$router.push({
-                                    name: "users.edit",
-                                    params: {
-                                      user: scope.row.id,
+                            _vm.hasAccess("user.user-update")
+                              ? _c("el-button", {
+                                  attrs: {
+                                    type: "primary",
+                                    size: "small",
+                                    icon: "el-icon-edit",
+                                  },
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.$router.push({
+                                        name: "users.edit",
+                                        params: {
+                                          user: scope.row.id,
+                                        },
+                                      })
                                     },
-                                  })
-                                },
-                              },
-                            }),
+                                  },
+                                })
+                              : _vm._e(),
                             _vm._v(" "),
-                            _vm.user.id != scope.row.id
+                            _vm.user.id != scope.row.id &&
+                            _vm.hasAccess("user.user-delete")
                               ? _c("el-button", {
                                   attrs: {
                                     size: "small",

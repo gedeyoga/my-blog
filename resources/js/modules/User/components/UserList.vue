@@ -18,6 +18,7 @@
             >
                 <span>List User</span>
                 <el-button
+                    v-if="hasAccess('user.user-list')"
                     type="primary"
                     size="small"
                     icon="fas fa-plus"
@@ -105,6 +106,7 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button
+                                    v-if="hasAccess('user.user-update')"
                                     type="primary"
                                     size="small"
                                     icon="el-icon-edit"
@@ -122,7 +124,7 @@
                                     type="danger"
                                     plain
                                     icon="el-icon-delete"
-                                    v-if="user.id != scope.row.id"
+                                    v-if="user.id != scope.row.id && hasAccess('user.user-delete')"
                                     @click="onDelete(scope.row)"
                                 ></el-button>
                             </el-button-group>

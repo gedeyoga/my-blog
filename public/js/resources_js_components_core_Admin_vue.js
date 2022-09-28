@@ -274,6 +274,26 @@ __webpack_require__.r(__webpack_exports__);
         images: url_image,
         zIndex: 999999999999999
       });
+    },
+    hasAccess: function hasAccess(permission) {
+      var roles = this.user.roles.find(function (item) {
+        return true;
+      });
+      var data_permission = permission.split('.');
+      var module = data_permission[0];
+      var permission_list = roles.permissions[module];
+
+      if (permission_list) {
+        var data = permission_list.find(function (item) {
+          return item.name == permission;
+        });
+
+        if (data) {
+          return data.allow;
+        }
+      }
+
+      return false;
     }
   }
 });
@@ -944,117 +964,151 @@ var render = function () {
       _vm._v(" "),
       _c("hr", { staticClass: "sidebar-divider" }),
       _vm._v(" "),
-      _c("div", { staticClass: "sidebar-heading" }, [_vm._v("Master Data")]),
-      _vm._v(" "),
-      _c("li", { staticClass: "nav-item" }, [
-        _vm._m(1),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "collapse",
-            attrs: {
-              id: "collapseUser",
-              "aria-labelledby": "headingUtilities",
-              "data-parent": "#accordionSidebar",
-            },
-          },
-          [
-            _c("div", { staticClass: "bg-white py-2 collapse-inner rounded" }, [
-              _c("h6", { staticClass: "collapse-header" }, [
-                _vm._v("Manajemen User"),
-              ]),
+      _vm.hasAccess("role.role-list") || _vm.hasAccess("user.user-list")
+        ? [
+            _c("div", { staticClass: "sidebar-heading" }, [
+              _vm._v("Master Data"),
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "nav-item" }, [
+              _vm._m(1),
               _vm._v(" "),
               _c(
-                "a",
+                "div",
                 {
-                  staticClass: "collapse-item",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function ($event) {
-                      $event.preventDefault()
-                      return _vm.$router.push({ name: "users.index" })
-                    },
+                  staticClass: "collapse",
+                  attrs: {
+                    id: "collapseUser",
+                    "aria-labelledby": "headingUtilities",
+                    "data-parent": "#accordionSidebar",
                   },
                 },
-                [_vm._v("User")]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "collapse-item",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function ($event) {
-                      $event.preventDefault()
-                      return _vm.$router.push({ name: "roles.index" })
-                    },
-                  },
-                },
-                [_vm._v("Role")]
+                [
+                  _c(
+                    "div",
+                    { staticClass: "bg-white py-2 collapse-inner rounded" },
+                    [
+                      _c("h6", { staticClass: "collapse-header" }, [
+                        _vm._v("Manajemen User"),
+                      ]),
+                      _vm._v(" "),
+                      _vm.hasAccess("user.user-list")
+                        ? _c(
+                            "a",
+                            {
+                              staticClass: "collapse-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.$router.push({
+                                    name: "users.index",
+                                  })
+                                },
+                              },
+                            },
+                            [_vm._v("User")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.hasAccess("role.role-list")
+                        ? _c(
+                            "a",
+                            {
+                              staticClass: "collapse-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.$router.push({
+                                    name: "roles.index",
+                                  })
+                                },
+                              },
+                            },
+                            [_vm._v("Role")]
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
+                ]
               ),
             ]),
           ]
-        ),
-      ]),
+        : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "sidebar-heading" }, [
-        _vm._v("Manajemen Content"),
-      ]),
-      _vm._v(" "),
-      _c("li", { staticClass: "nav-item" }, [
-        _vm._m(2),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "collapse",
-            attrs: {
-              id: "collapseBlog",
-              "aria-labelledby": "headingBlog",
-              "data-parent": "#accordionSidebar",
-            },
-          },
-          [
-            _c("div", { staticClass: "bg-white py-2 collapse-inner rounded" }, [
-              _c("h6", { staticClass: "collapse-header" }, [
-                _vm._v("Manajemen Content"),
-              ]),
+      _vm.hasAccess("category.category-list")
+        ? [
+            _c("div", { staticClass: "sidebar-heading" }, [
+              _vm._v("Manajemen Content"),
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "nav-item" }, [
+              _vm._m(2),
               _vm._v(" "),
               _c(
-                "a",
+                "div",
                 {
-                  staticClass: "collapse-item",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function ($event) {
-                      $event.preventDefault()
-                      return _vm.$router.push({ name: "posts.index" })
-                    },
+                  staticClass: "collapse",
+                  attrs: {
+                    id: "collapseBlog",
+                    "aria-labelledby": "headingBlog",
+                    "data-parent": "#accordionSidebar",
                   },
                 },
-                [_vm._v("Postingan")]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "collapse-item",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function ($event) {
-                      $event.preventDefault()
-                      return _vm.$router.push({ name: "categories.index" })
-                    },
-                  },
-                },
-                [_vm._v("Kategori")]
+                [
+                  _c(
+                    "div",
+                    { staticClass: "bg-white py-2 collapse-inner rounded" },
+                    [
+                      _c("h6", { staticClass: "collapse-header" }, [
+                        _vm._v("Manajemen Content"),
+                      ]),
+                      _vm._v(" "),
+                      _vm.hasAccess("post.post-list")
+                        ? _c(
+                            "a",
+                            {
+                              staticClass: "collapse-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.$router.push({
+                                    name: "posts.index",
+                                  })
+                                },
+                              },
+                            },
+                            [_vm._v("Postingan")]
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.hasAccess("category.category-list")
+                        ? _c(
+                            "a",
+                            {
+                              staticClass: "collapse-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.$router.push({
+                                    name: "categories.index",
+                                  })
+                                },
+                              },
+                            },
+                            [_vm._v("Kategori")]
+                          )
+                        : _vm._e(),
+                    ]
+                  ),
+                ]
               ),
             ]),
           ]
-        ),
-      ]),
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "sidebar-card d-none d-lg-flex" }, [
         _c("img", {
@@ -1073,7 +1127,8 @@ var render = function () {
           [_vm._v("Upgrade to Pro!")]
         ),
       ]),
-    ]
+    ],
+    2
   )
 }
 var staticRenderFns = [

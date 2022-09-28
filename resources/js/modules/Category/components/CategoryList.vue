@@ -18,6 +18,7 @@
             >
                 <span>List Kategori</span>
                 <el-button
+                    v-if="hasAccess('category.category-create')"
                     type="primary"
                     size="small"
                     icon="fas fa-plus"
@@ -83,6 +84,7 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button
+                                    v-if="hasAccess('category.category-update')"
                                     type="primary"
                                     size="small"
                                     icon="el-icon-edit"
@@ -96,6 +98,7 @@
                                     "
                                 ></el-button>
                                 <el-button
+                                    v-if="hasAccess('category.category-delete')"
                                     size="small"
                                     type="danger"
                                     plain

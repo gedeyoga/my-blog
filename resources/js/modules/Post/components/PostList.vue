@@ -17,7 +17,8 @@
                 class="card-header d-flex justify-content-between align-items-center"
             >
                 <span>List Postingan</span>
-                <el-button
+                <el-button 
+                    v-if="hasAccess('post.post-create')"
                     type="primary"
                     size="small"
                     icon="fas fa-plus"
@@ -56,6 +57,11 @@
                     ref="pageTable"
                     v-loading.body="tableIsLoading"
                 >
+                    <el-table-column prop="name" label="Thubmnail" width="120px">
+                        <template slot-scope="scope">
+                            <img class="img-thumbnail" :src="scope.row.thumbnail ? scope.row.thumbnail.original_url : '#'" alt="">
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="name" label="Postingan">
                         <template slot-scope="scope">
                             <a
@@ -70,7 +76,8 @@
                                 "
                                 href="#"
                             >
-                                {{ scope.row.title }}
+                                {{ scope.row.title }} <br>
+                                <span v-for="(item, index) in scope.row.category" :key="index" class="badge badge-primary mr-1"><small>{{ item.name }}</small></span>
                             </a>
                             <span v-else class="text-warning"
                                 ><i>(Judul belum dibuat)</i></span
@@ -87,6 +94,7 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button
+                                    v-if="hasAccess('post.post-update')"
                                     type="primary"
                                     size="small"
                                     icon="el-icon-edit"
@@ -100,6 +108,7 @@
                                     "
                                 ></el-button>
                                 <el-button
+                                    v-if="hasAccess('post.post-delete')"
                                     size="small"
                                     type="danger"
                                     plain
