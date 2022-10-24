@@ -23,4 +23,9 @@ mix.js("resources/js/app.js", "public/js")
     .js("resources/js/app-vendor.js", "public/js")
     .vue()
     .sass("resources/sass/app.scss", "public/css");
-mix.version();
+
+mix.js("resources/js/app-frontend.js", "public/js")
+    .js("resources/js/app-frontend-vendor.js", "public/js")
+    .vue()
+    .sass("resources/sass/app-frontend.scss", "public/css")
+    .version();

@@ -14,7 +14,7 @@ const routes = [
     ...RoleRoutes,
     ...DashboardRoutes,
     ...CategoryRoutes,
-    ...PostRoutes
+    ...PostRoutes,
 ];
 
 const router = new VueRouter({

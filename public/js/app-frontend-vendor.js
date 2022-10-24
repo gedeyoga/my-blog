@@ -16923,9 +16923,9 @@ return jQuery;
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-/*!************************************!*\
-  !*** ./resources/js/app-vendor.js ***!
-  \************************************/
+/*!*********************************************!*\
+  !*** ./resources/js/app-frontend-vendor.js ***!
+  \*********************************************/
 window.$ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 __webpack_require__(/*! jquery.easing */ "./node_modules/jquery.easing/jquery.easing.js");
