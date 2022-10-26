@@ -10,7 +10,11 @@ class PublicController extends Controller
         return view('layouts.frontend');
     }
 
-    public function article($slug) {
+    public function articleDetail($slug) {
+        return view('layouts.frontend');
+    }
+
+    public function articleList() {
         return view('layouts.frontend');
     }
 }

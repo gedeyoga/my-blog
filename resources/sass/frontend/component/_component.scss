@@ -37,11 +37,24 @@
             margin: 10px 0;
             .category {
                 font-size: 12px;
-                color: $base-color;
-                font-weight: 400;
+                color: $base-color !important;
+                font-weight: 400 !important;
                 padding: 5px 10px;
                 background-color: $primary-color;
                 margin-right: 10px;
                 border-radius: 50px;
             }
         }
+
+.search-article {
+    .form-control {
+        background-color: $base-color-darker-1;
+        border: none;
+        outline: none;
+        color: $text-color !important;
+
+        &:focus{
+            outline: none;
+        }
+    }
+}

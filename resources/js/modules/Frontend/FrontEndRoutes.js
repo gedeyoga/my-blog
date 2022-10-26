@@ -1,5 +1,6 @@
 import HomeComponent from "./Pages/HomeComponent.vue";
-import ArticleComponent from "./Pages/ArticleComponent.vue";
+import DetailArticleComponent from "./Pages/DetailArticleComponent.vue";
+import ContentPageComponent from "./Pages/ContentPageComponent.vue";
 
 let meta = {
     layout: 'front-end'
@@ -14,8 +15,14 @@ export default [
     },
     {
         path: "/article/:slug",
-        name: "article",
-        component: ArticleComponent,
+        name: "article.detail",
+        component: DetailArticleComponent,
+        meta: meta,
+    },
+    {
+        path: "/article",
+        name: "article.list",
+        component: ContentPageComponent,
         meta: meta,
     },
 ];

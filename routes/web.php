@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [PublicController::class , 'index'])->name('root');
-Route::get('/article/{slug}', [PublicController::class , 'article'])->name('article');
+Route::get('/article', [PublicController::class , 'articleList'])->name('article.list');
+Route::get('/article/{slug}', [PublicController::class , 'articleDetail'])->name('article.detail');
 
 
 Route::group(['prefix' => 'admin' , 'middleware' => 'auth'] , function() {
