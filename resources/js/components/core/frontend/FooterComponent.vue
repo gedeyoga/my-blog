@@ -3,7 +3,7 @@
         <footer>
             <div class="d-flex flex-column align-items-center footer-contact">
                 <h2 class="sub-title">Hubungi Saya</h2>
-                <p class="mb-5 text-center">Anda dapat menghubungi saya melalui kontak <br> yang tertera dibawah ini.</p>
+                <p class="mb-5 text-center">Anda dapat menghubungi saya melalui kontak <br class="d-none d-lg-block"> yang tertera dibawah ini.</p>
 
                 <div class="button-group d-flex">
                     <a href="#" class="btn button-primary btn-sm mx-2 px-2">

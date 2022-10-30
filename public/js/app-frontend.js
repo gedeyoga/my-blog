@@ -3794,7 +3794,9 @@ var staticRenderFns = [function () {
     staticClass: "sub-title"
   }, [_vm._v("Hubungi Saya")]), _vm._v(" "), _c("p", {
     staticClass: "mb-5 text-center"
-  }, [_vm._v("Anda dapat menghubungi saya melalui kontak "), _c("br"), _vm._v(" yang tertera dibawah ini.")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Anda dapat menghubungi saya melalui kontak "), _c("br", {
+    staticClass: "d-none d-lg-block"
+  }), _vm._v(" yang tertera dibawah ini.")]), _vm._v(" "), _c("div", {
     staticClass: "button-group d-flex"
   }, [_c("a", {
     staticClass: "btn button-primary btn-sm mx-2 px-2",
@@ -4097,13 +4099,15 @@ var staticRenderFns = [function () {
   }, [_vm._v("Belajar dasar php")]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, [_c("div", {
-    staticClass: "col-md-6 list-category"
-  }, [_c("span", [_c("a", {
+    staticClass: "col-md-6 list-category d-flex flex-column flex-lg-row"
+  }, [_c("a", {
     staticClass: "author text-color mr-3",
     attrs: {
       href: "#"
     }
-  }, [_vm._v("Yoga Permana")]), _vm._v(" "), _c("a", {
+  }, [_vm._v("Yoga Permana")]), _vm._v(" "), _c("div", {
+    staticClass: "mt-3 mt-lg-0"
+  }, [_c("a", {
     staticClass: "text-general category",
     attrs: {
       href: "#"
@@ -4111,7 +4115,7 @@ var staticRenderFns = [function () {
   }, [_vm._v("Laravel")])])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-6"
   }, [_c("span", {
-    staticClass: "d-block text-right text-general"
+    staticClass: "d-block text-lg-right text-general mt-3 mt-lg-0"
   }, [_vm._v("2022 Aug 01 - 18:30")])])]), _vm._v(" "), _c("div", {
     staticClass: "row justify-content-center"
   }, [_c("div", {
@@ -4137,7 +4141,7 @@ var staticRenderFns = [function () {
   }, [_c("div", {
     staticClass: "card border more-article"
   }, [_c("div", {
-    staticClass: "card-body d-flex"
+    staticClass: "card-body d-flex flex-column flex-lg-row"
   }, [_c("div", {
     staticClass: "img-cover mr-3"
   }, [_c("img", {
@@ -4149,20 +4153,22 @@ var staticRenderFns = [function () {
   })]), _vm._v(" "), _c("div", {
     staticClass: "d-flex flex-column justify-content-center"
   }, [_c("h3", {
-    staticClass: "sub-title w-100"
-  }, [_vm._v("\n                                        Laravel framework 9\n                                    ")]), _vm._v(" "), _c("span", {
-    staticClass: "list-category"
+    staticClass: "sub-title w-100 mt-4 mt-lg-0"
+  }, [_vm._v("\n                                        Laravel framework 9\n                                    ")]), _vm._v(" "), _c("div", {
+    staticClass: "list-category d-flex flex-column flex-lg-row"
   }, [_c("a", {
     staticClass: "author text-color mr-3",
     attrs: {
       href: "#"
     }
-  }, [_vm._v("Yoga Permana")]), _vm._v(" "), _c("a", {
+  }, [_vm._v("Yoga Permana")]), _vm._v(" "), _c("div", {
+    staticClass: "mt-3 mt-lg-0"
+  }, [_c("a", {
     staticClass: "text-general category",
     attrs: {
       href: "#"
     }
-  }, [_vm._v("Laravel")])])])])])])])])])])]);
+  }, [_vm._v("Laravel")])])])])])])])])])])])]);
 }];
 render._withStripped = true;
 
@@ -4191,28 +4197,28 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "row"
   }, [_vm._m(0), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
+    staticClass: "col-lg-6 mt-5 mt-lg-0"
   }, [_c("div", {
-    staticClass: "card-img"
+    staticClass: "card-img text-lg-right text-center"
   }, [_c("img", {
     attrs: {
       src: _vm.$url + "/img/my-profile.png",
       alt: ""
     }
   })])])])]), _vm._v(" "), _c("div", {
-    staticClass: "box bgc-primary"
+    staticClass: "box bgc-primary d-none d-lg-block"
   })]), _vm._v(" "), _c("section", {
     staticClass: "portofolio"
   }, [_c("div", {
     staticClass: "container"
   }, [_c("h2", {
-    staticClass: "sub-title"
+    staticClass: "sub-title text-center text-lg-left"
   }, [_vm._v("portofolio")]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, _vm._l(_vm.articles, function (article, index) {
     return _c("div", {
       key: index,
-      staticClass: "col-lg-4"
+      staticClass: "col-lg-4 col-md-6 col-12 mb-5"
     }, [_c("aricle-card-component", {
       attrs: {
         article: article
@@ -4223,13 +4229,13 @@ var render = function render() {
   }, [_c("div", {
     staticClass: "container"
   }, [_c("h2", {
-    staticClass: "sub-title"
+    staticClass: "sub-title text-center text-lg-left"
   }, [_vm._v("artikel")]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, _vm._l(_vm.articles, function (article, index) {
     return _c("div", {
       key: index,
-      staticClass: "col-lg-4"
+      staticClass: "col-lg-4 col-md-6 col-12 mb-5"
     }, [_c("aricle-card-component", {
       attrs: {
         article: article
@@ -4241,31 +4247,35 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "col-md-6"
+    staticClass: "col-lg-6 text-center text-lg-left"
   }, [_c("h2", {
     staticClass: "title"
-  }, [_vm._v("\n                        SELAMAT "), _c("br"), _vm._v("\n                        DATANG.\n                    ")]), _vm._v(" "), _c("p", {
+  }, [_vm._v("\n                        SELAMAT "), _c("br", {
+    staticClass: "d-none d-lg-block"
+  }), _vm._v("\n                        DATANG.\n                    ")]), _vm._v(" "), _c("p", {
     staticClass: "text-general"
-  }, [_vm._v("\n                        Website ini adalah tempat memajang hasil karya\n                        "), _c("br"), _vm._v("\n                        saya diantaranya\n                    ")]), _vm._v(" "), _c("div", {
-    staticClass: "d-flex"
+  }, [_vm._v("\n                        Website ini adalah tempat memajang hasil karya\n                        "), _c("br", {
+    staticClass: "d-none d-lg-block"
+  }), _vm._v("\n                        saya diantaranya\n                    ")]), _vm._v(" "), _c("div", {
+    staticClass: "d-flex justify-content-center justify-content-lg-start px-3 px-lg-0"
   }, [_c("div", {
-    staticClass: "item-count mr-5"
+    staticClass: "item-count mr-lg-5 mr-3"
   }, [_c("label", [_vm._v("10")]), _vm._v(" "), _c("span", {
     staticClass: "d-block"
   }, [_vm._v("Artikel")])]), _vm._v(" "), _c("div", {
-    staticClass: "item-count mr-5"
+    staticClass: "item-count mr-lg-5 mr-3"
   }, [_c("label", [_vm._v("4")]), _vm._v(" "), _c("span", {
     staticClass: "d-block"
   }, [_vm._v("Portofolio")])]), _vm._v(" "), _c("div", {
-    staticClass: "item-count mr-5"
+    staticClass: "item-count"
   }, [_c("label", [_vm._v("4")]), _vm._v(" "), _c("span", {
     staticClass: "d-block"
-  }, [_vm._v("Pengalaman Kerja")])])])]);
+  }, [_vm._v("Pengalaman")])])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "text-center mt-5"
+    staticClass: "text-center mt-lg-5 mt-3"
   }, [_c("a", {
     staticClass: "btn button-primary",
     attrs: {
@@ -4276,7 +4286,7 @@ var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "text-center mt-5"
+    staticClass: "text-center mt-lg-5 mt-3"
   }, [_c("a", {
     staticClass: "btn button-primary",
     attrs: {

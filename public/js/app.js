@@ -4945,7 +4945,9 @@ var staticRenderFns = [function () {
     staticClass: "sub-title"
   }, [_vm._v("Hubungi Saya")]), _vm._v(" "), _c("p", {
     staticClass: "mb-5 text-center"
-  }, [_vm._v("Anda dapat menghubungi saya melalui kontak "), _c("br"), _vm._v(" yang tertera dibawah ini.")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Anda dapat menghubungi saya melalui kontak "), _c("br", {
+    staticClass: "d-none d-lg-block"
+  }), _vm._v(" yang tertera dibawah ini.")]), _vm._v(" "), _c("div", {
     staticClass: "button-group d-flex"
   }, [_c("a", {
     staticClass: "btn button-primary btn-sm mx-2 px-2",

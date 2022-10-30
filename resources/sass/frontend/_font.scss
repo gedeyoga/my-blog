@@ -2,12 +2,23 @@
     font-family: 'Roboto';
 }
 
-$heading-1: 72px;
-$heading-2: 48px;
-$heading-3: 36px;
-$heading-4: 30px;
-$heading-5: 24px;
-$heading-6: 18px;
+$heading-1: 40px;
+$heading-2: 35px;
+$heading-3: 30px;
+$heading-4: 25px;
+$heading-5: 20px;
+$heading-6: 18px;   
+
+
+@media screen and(min-width: 960px){
+    $heading-1: 72px;
+    $heading-2: 48px;
+    $heading-3: 36px;
+    $heading-4: 30px;
+    $heading-5: 24px;
+    $heading-6: 18px;    
+}
+
 
 .sub-title {
     font-size: $heading-3;
