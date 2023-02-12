@@ -25,4 +25,16 @@ export default [
         component: ContentPageComponent,
         meta: meta,
     },
+    {
+        path: "/category/:category",
+        name: "category.detail.list",
+        component: ContentPageComponent,
+        meta: meta,
+    },
+    {
+        path: "/category",
+        name: "category.list",
+        component: ContentPageComponent,
+        meta: meta,
+    },
 ];

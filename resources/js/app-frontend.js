@@ -14,6 +14,7 @@ import routes_frontend from "./routes-frontend";
 import imagePreview from "image-preview-vue";
 import "image-preview-vue/lib/imagepreviewvue.css";
 
+require('./filters');
 window.axios = require("axios");
 
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";

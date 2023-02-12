@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Events\UserWasCreated;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -47,6 +48,8 @@ class EloquentUserRepository extends EloquentBaseRepository implements UserRepos
         if(isset($data['role'])) {
             $user->assignRole($data['role']);
         }
+
+        event(new UserWasCreated());
 
         return $user;
 

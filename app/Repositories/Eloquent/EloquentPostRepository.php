@@ -50,7 +50,7 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
         return $post;
     }
 
-    public function listPosts(Request $request)
+    public function listPosts(Request $request , $status = null)
     {
         $posts = $this->model;
 
@@ -60,7 +60,7 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
         }
 
         if ($request->get('search')) {
-            $posts
+            $posts = $posts
                 ->where(function ($query) use ($request) {
                     $query
                         ->where('title', 'like', '%' . $request->get('search') . '%');
@@ -68,14 +68,27 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
         }
 
         if($request->get('category')) {
-            $posts
+             $posts = $posts
                 ->whereHas('category' , function($query) use ($request) {
                     $query->where('name' , $request->get('category'));
                 });
+        }else if($request->get('category_exclude')) {
+            $category_exclude = explode(',' , $request->get('category_exclude'));
+            $posts = $posts->whereHas('category' , fn($query) => $query->whereNotIn('name' , $category_exclude));
         }
 
-        if($request->get('status')) {
-            $posts->where('status' , $request->get('status'));
+        $posts = $posts->when($request->get('category_id') , function($query) use ($request) {
+            return  $query->whereHas('category' , fn($query) => $query->whereIn('id' , $request->get('category_id')));
+        });
+
+        if (!is_null($status)) {
+             $posts = $posts->where('status', $status);
+        }else if($request->get('status')) {
+             $posts = $posts->where('status' , $request->get('status'));
+        } 
+
+        if(!is_null($request->get('limit'))) {
+            return $posts->limit($request->get('limit'))->get();
         }
 
         return $posts->paginate($request->get('per_page' , 10));

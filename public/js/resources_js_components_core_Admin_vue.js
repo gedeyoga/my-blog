@@ -61,6 +61,9 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         window.location.href = response.data.redirect;
       });
+    },
+    handlePreviewWebsite: function handlePreviewWebsite() {
+      window.open(this.$url, '_blank');
     }
   }
 });
@@ -158,7 +161,16 @@ var render = function render() {
     _c = _vm._self._c;
   return _c("div", [_c("nav", {
     staticClass: "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-  }, [_vm._m(0), _vm._v(" "), _c("span", [_vm._v("Admin Panel")]), _vm._v(" "), _c("ul", {
+  }, [_vm._m(0), _vm._v(" "), _c("el-button", {
+    attrs: {
+      size: "mini",
+      type: "primary",
+      icon: "el-icon-view"
+    },
+    on: {
+      click: _vm.handlePreviewWebsite
+    }
+  }, [_vm._v("Lihat Website")]), _vm._v(" "), _c("ul", {
     staticClass: "navbar-nav ml-auto"
   }, [_c("div", {
     staticClass: "topbar-divider d-none d-sm-block"
@@ -181,7 +193,7 @@ var render = function render() {
     attrs: {
       src: _vm.$url + "/img/undraw_profile.svg"
     }
-  })]), _vm._v(" "), _vm._m(1)])])]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _vm._m(1)])])], 1), _vm._v(" "), _c("div", {
     staticClass: "modal fade",
     attrs: {
       id: "logoutModal",

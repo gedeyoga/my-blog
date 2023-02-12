@@ -24,6 +24,14 @@ class CategoryController extends Controller
         return CategoryTransformer::collection($categories);
     }
 
+    public function publicList(Request $request)
+    {
+        $categories_repo = app(CategoryRepository::class);
+        $categories=  $categories_repo->listCategories($request);
+
+        return CategoryTransformer::collection($categories);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -49,6 +57,12 @@ class CategoryController extends Controller
      */
     public function show( Category $category)
     {
+        return new CategoryTransformer($category);
+    }
+
+    public function showByName( Request $request)
+    {
+        $category= Category::whereRaw('lower(name) = "' . strtolower($request->get('category')). '"')->first();
         return new CategoryTransformer($category);
     }
 

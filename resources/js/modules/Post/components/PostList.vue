@@ -30,9 +30,25 @@
             <div class="card-body">
                 <div class="row mb-3 align-items-end">
                     <div class="col-md-9">
+                        <span class="d-block">Filter Kategori</span>
+                        <el-select  
+                            :loading="loading.filter_category" 
+                            v-model="filter.category_id" 
+                            multiple 
+                            @change="fetchFilter"
+                            placeholder="Pilih Kategori">
+                            <el-option
+                                v-for="item in list_category"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="col-md-3">
                         <div class="btn-group float-right">
                             <el-input
-                                size="mini"
+                                
                                 prefix-icon="el-icon-search"
                                 @keyup.enter.native="fetchData"
                                 v-model="filter.search"
@@ -48,7 +64,7 @@
                     </div>
                 </div>
 
-                <div class="border-bottom"></div>
+                <div class="border-bottom mb-3"></div>
 
                 <el-table
                     :data="data"
@@ -90,7 +106,7 @@
                             {{ scope.row.updated_at }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="actions" label="Aksi">
+                    <el-table-column width="180" prop="actions" label="Aksi">
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button
@@ -157,8 +173,13 @@ export default {
             list_roles: [],
             filter: {
                 search: "",
+                category_id: [],
             },
             loading_draft: false,
+            list_category: [],
+            loading: {
+                filter_category: false,
+            }
         };
     },
 
@@ -171,7 +192,7 @@ export default {
                     per_page: this.meta.per_page,
                     order_by: this.order_meta.order_by,
                     order: this.order_meta.order,
-                    search: this.searchQuery,
+                    ...this.filter
                 },
                 cancelToken: cancelSource.token,
             };
@@ -195,13 +216,11 @@ export default {
             this.queryServer();
         },
         handleSizeChange(event) {
-            console.log(`per page :${event}`);
             this.tableIsLoading = true;
             this.meta.per_page = event;
             this.queryServer();
         },
         handleCurrentChange(event) {
-            console.log(`current page :${event}`);
             this.tableIsLoading = true;
             this.meta.current_page = event;
             this.queryServer();
@@ -215,7 +234,6 @@ export default {
             });
         },
         performSearch: _.debounce(function (query) {
-            console.log(`searching:${query.target.value}`);
             this.tableIsLoading = true;
             this.queryServer({
                 search: query.target.value,
@@ -248,6 +266,10 @@ export default {
                     });
             })
         },
+        fetchFilter() {
+            this.meta.current_page = 1;
+            this.fetchData();
+        },
 
         onCreateDraftPost() {
             this.loading_draft = true;
@@ -271,10 +293,29 @@ export default {
                     this.loading_draft = false;
                 });
         },
+
+        fetchCategories(){
+            this.loading.filter_category = true;
+
+            axios
+                .get(route("api.category.index") , {
+                    params: {
+                        paginate: false
+                    }
+                })
+                .then((response) => {
+                    this.loading.filter_category = false;
+                    this.list_category = response.data.data;
+                })
+                .catch(() => {
+                    this.loading.filter_category = false;
+                });
+        }
     },
 
     mounted() {
         this.fetchData();
+        this.fetchCategories();
     },
 };
 </script>

@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicController::class , 'index'])->name('root');
 Route::get('/article', [PublicController::class , 'articleList'])->name('article.list');
 Route::get('/article/{slug}', [PublicController::class , 'articleDetail'])->name('article.detail');
+Route::get('/category/{category}', [PublicController::class , 'categoryDetailList'])->name('category.detail.list');
+Route::get('/category', [PublicController::class , 'categoryList'])->name('category.list');
 
 
 Route::group(['prefix' => 'admin' , 'middleware' => 'auth'] , function() {

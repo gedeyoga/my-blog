@@ -16,11 +16,11 @@
 
                         <div class="d-flex justify-content-center justify-content-lg-start px-3 px-lg-0">
                             <div class="item-count mr-lg-5 mr-3">
-                                <label>10</label>
+                                <label>{{ articles.length }}</label>
                                 <span class="d-block">Artikel</span>
                             </div>
                             <div class="item-count mr-lg-5 mr-3">
-                                <label>4</label>
+                                <label>{{ portofolio.length }}</label>
                                 <span class="d-block">Portofolio</span>
                             </div>
                             <div class="item-count ">
@@ -40,11 +40,11 @@
             <div class="box bgc-primary d-none d-lg-block"></div>
         </section>
 
-        <section class="portofolio">
+        <section class="portofolio" v-if="portofolio.length > 0">
             <div class="container">
                 <h2 class="sub-title text-center text-lg-left">portofolio</h2>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12 mb-5"  v-for="(article , index) in articles" :key="index">
+                    <div class="col-lg-4 col-md-6 col-12 mb-5"  v-for="(article , index) in portofolio" :key="index">
                         <aricle-card-component 
                             :article="article"
                         ></aricle-card-component>
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="text-center mt-lg-5 mt-3">
-                    <a href="#" class="btn button-primary">Lihat Semua</a>
+                    <a class="btn button-primary" :href="$router.resolve({name: 'article.list'}).href">Lihat Semua</a>
                 </div>
             </div>
         </section>
@@ -84,41 +84,46 @@ export default {
     },
     data() {
         return {
-            articles : [
-                {
-                    title: 'Tutorial Laravel Pemula',
-                    slug: 'asfsaf-nkadnk',
-                    categories: [
-                        { name: 'Laravel'},
-                    ],
-                    author: {
-                        name: 'Yoga Permana'
-                    }
-                },
-                {
-                    title: 'Tutorial Laravel Pemula',
-                    slug: 'asfsaf-nkadnk',
-                    categories: [
-                        { name: 'PHP'},
-                        { name: 'Laravel'},
-                    ],
-                    author: {
-                        name: 'Yoga Permana'
-                    }
-                },
-                {
-                    title: 'Tutorial Laravel Pemula',
-                    slug: 'asfsaf-nkadnk',
-                    categories: [
-                        { name: 'PHP'},
-                        { name: 'Laravel'},
-                    ],
-                    author: {
-                        name: 'Yoga Permana'
-                    }
-                }
-            ]
+            articles : [],
+            portofolio: [],
+
+            loading : {
+                article: false,
+                portofolio: false,
+            }
         };
     },
+
+    methods: {
+        fetchPortofolio() {
+            this.loading.article = true;
+            axios
+                .get(route('api.public.post') , {
+                    params: {category: 'portofolio' , limit: 3}
+                })
+                .then((response) => {
+                    this.loading.portofolio = false;
+                    this.portofolio = response.data.data;
+                })
+                .catch(() => this.loading.portofolio =false)
+        },
+        fetchArticle() {
+            this.loading.article = true;
+            axios
+                .get(route('api.public.post') , {
+                    params: { limit: 3}
+                })
+                .then((response) => {
+                    this.loading.article = false;
+                    this.articles = response.data.data;
+                })
+                .catch(() => this.loading.article =false)
+        },
+    },
+
+    mounted() {
+        this.fetchPortofolio();
+        this.fetchArticle();
+    }
 }
 </script>

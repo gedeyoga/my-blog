@@ -40,8 +40,19 @@ Route::group(['middleware' => 'auth:sanctum'] , function() {
         Route::get('/permission', [RoleController::class, 'permissionList'])->name('permission.list');
     });
 
-    Route::prefix('categories')->apiResource('category', CategoryController::class, ['as' => 'api']);
+    Route::group(['prefix' => 'categories', 'as' => 'api.category.'], function () {
+        Route::post('/', [CategoryController::class, 'store'])->name('store');
+        Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}', [CategoryController::class, 'update'])->name('delete');
+    });
+
+    // Route::prefix('categories')->apiResource('category', CategoryController::class, ['as' => 'api']);
     Route::prefix('posts')->apiResource('post', PostController::class, ['as' => 'api']);
     Route::put('/post/{post}/status' , [PostController::class , 'statusChange'])->name('api.post.status-change');
     
 });
+
+Route::get('/categories/list' , [CategoryController::class , 'index'])->name('api.category.index');
+Route::get('/categories/{category}' , [CategoryController::class , 'show'])->name('api.category.show');
+Route::get('/categories' , [CategoryController::class , 'showByName'])->name('api.category.show-name');
+Route::get('/article/list' , [PostController::class , 'listPostPublished'])->name('api.public.post');

@@ -9,14 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Laracasts\Presenter\PresentableTrait;
+use App\Presenters\PostPresenter;
 
 class Post extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes , InteractsWithMedia;
+    use PresentableTrait, HasFactory, SoftDeletes , InteractsWithMedia;
 
     protected $fillable = [
         'slug', 'title', 'article', 'status', 'created_by'
     ];
+
+    protected $presenter = PostPresenter::class;
 
     public function category()
     {

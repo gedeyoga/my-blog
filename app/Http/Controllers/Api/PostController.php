@@ -116,4 +116,13 @@ class PostController extends Controller
             'message' => $message[$post->status],
         ]);
     }
+
+    public function listPostPublished(Request $request)
+    {
+        $post_repo = app(PostRepository::class);
+
+        $posts = $post_repo->listPosts($request , 'publish');
+
+        return PostTransformer::collection($posts);
+    }
 }

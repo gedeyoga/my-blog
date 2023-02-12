@@ -12,7 +12,7 @@
                 <i class="fa fa-bars"></i>
             </button>
 
-            <span>Admin Panel</span>
+            <el-button size="mini" type="primary" icon="el-icon-view" @click="handlePreviewWebsite">Lihat Website</el-button>
 
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
@@ -145,6 +145,10 @@ export default {
                     window.location.href = response.data.redirect;
                 });
         },
+
+        handlePreviewWebsite() {
+            window.open(this.$url , '_blank');
+        }
     },
 };
 </script>

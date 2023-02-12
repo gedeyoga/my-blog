@@ -15,6 +15,8 @@ import CKEditor from "ckeditor4-vue";
 import imagePreview from "image-preview-vue";
 import "image-preview-vue/lib/imagepreviewvue.css";
 
+require('./filters');
+
 window.axios = require("axios");
 
 window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
