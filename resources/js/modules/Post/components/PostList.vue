@@ -80,30 +80,37 @@
                     </el-table-column>
                     <el-table-column prop="name" label="Postingan">
                         <template slot-scope="scope">
-                            <a
-                                v-if="scope.row.title"
-                                @click.prevent="
-                                    $router.push({
-                                        name: 'posts.draft',
-                                        params: {
-                                            post: scope.row.id,
-                                        },
-                                    })
-                                "
-                                href="#"
-                            >
-                                {{ scope.row.title }} <br>
+                            <div  v-if="scope.row.title">
+                                <a
+                                   
+                                    @click.prevent="
+                                        $router.push({
+                                            name: 'posts.draft',
+                                            params: {
+                                                post: scope.row.id,
+                                            },
+                                        })
+                                    "
+                                    href="#"
+                                >
+                                    {{ scope.row.title }} 
+                                </a>
+                                <br>
                                 <span v-for="(item, index) in scope.row.category" :key="index" class="badge badge-primary mr-1"><small>{{ item.name }}</small></span>
-                            </a>
-                            <span v-else class="text-warning"
-                                ><i>(Judul belum dibuat)</i></span
-                            >
-                            - <span class="text-danger" v-if="scope.row.status == 'draft'"><b><i>{{ scope.row.status }}</i></b></span>
+                                <div class="mt-3">
+                                    <a :href="getLinkSeePost(scope)" target="blank"> <i class="el-icon-view"></i> Lihat Postingan</a> | 
+                                    <a :href="getLinkSeePost(scope)" target="blank"> <i class="el-icon-document-copy"></i> Salin</a> 
+                                </div>
+                            </div>
+                            <div v-else>
+                                <span  class="text-warning"><i>(Judul belum dibuat)</i></span>
+                                - <span class="text-danger" v-if="scope.row.status == 'draft'"><b><i>{{ scope.row.status }}</i></b></span>
+                            </div>
                         </template>
                     </el-table-column>
                     <el-table-column prop="updated_at" label="Diperbaharui">
                         <template slot-scope="scope">
-                            {{ scope.row.updated_at }}
+                            {{ scope.row.updated_at | formatDate }}
                         </template>
                     </el-table-column>
                     <el-table-column width="180" prop="actions" label="Aksi">
@@ -310,6 +317,10 @@ export default {
                 .catch(() => {
                     this.loading.filter_category = false;
                 });
+        },
+
+        getLinkSeePost(scope){
+            return route('article.detail' , {slug: scope.row.slug})
         }
     },
 

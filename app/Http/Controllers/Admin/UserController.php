@@ -38,4 +38,9 @@ class UserController extends Controller
         return view('layouts.main');
     }
 
+    public function profile($id)
+    {
+        return view('layouts.main');
+    }
+
 }

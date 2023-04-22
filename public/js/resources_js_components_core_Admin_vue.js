@@ -193,7 +193,32 @@ var render = function render() {
     attrs: {
       src: _vm.$url + "/img/undraw_profile.svg"
     }
-  })]), _vm._v(" "), _vm._m(1)])])], 1), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "dropdown-menu dropdown-menu-right shadow animated--grow-in",
+    attrs: {
+      "aria-labelledby": "userDropdown"
+    }
+  }, [_c("a", {
+    staticClass: "dropdown-item",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.$router.push({
+          name: "users.profile",
+          params: {
+            user: _vm.user.id
+          }
+        });
+      }
+    }
+  }, [_c("i", {
+    staticClass: "fas fa-user fa-sm fa-fw mr-2 text-gray-400"
+  }), _vm._v("\n                        Profile\n                    ")]), _vm._v(" "), _c("div", {
+    staticClass: "dropdown-divider"
+  }), _vm._v(" "), _vm._m(1)])])])], 1), _vm._v(" "), _c("div", {
     staticClass: "modal fade",
     attrs: {
       id: "logoutModal",
@@ -246,35 +271,7 @@ var staticRenderFns = [function () {
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "dropdown-menu dropdown-menu-right shadow animated--grow-in",
-    attrs: {
-      "aria-labelledby": "userDropdown"
-    }
-  }, [_c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_c("i", {
-    staticClass: "fas fa-user fa-sm fa-fw mr-2 text-gray-400"
-  }), _vm._v("\n                        Profile\n                    ")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_c("i", {
-    staticClass: "fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"
-  }), _vm._v("\n                        Settings\n                    ")]), _vm._v(" "), _c("a", {
-    staticClass: "dropdown-item",
-    attrs: {
-      href: "#"
-    }
-  }, [_c("i", {
-    staticClass: "fas fa-list fa-sm fa-fw mr-2 text-gray-400"
-  }), _vm._v("\n                        Activity Log\n                    ")]), _vm._v(" "), _c("div", {
-    staticClass: "dropdown-divider"
-  }), _vm._v(" "), _c("a", {
+  return _c("a", {
     staticClass: "dropdown-item",
     attrs: {
       href: "#",
@@ -283,7 +280,7 @@ var staticRenderFns = [function () {
     }
   }, [_c("i", {
     staticClass: "fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
-  }), _vm._v("\n                        Logout\n                    ")])]);
+  }), _vm._v("\n                        Logout\n                    ")]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;

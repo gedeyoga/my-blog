@@ -28,7 +28,12 @@ Route::get('/category', [PublicController::class , 'categoryList'])->name('categ
 
 Route::group(['prefix' => 'admin' , 'middleware' => 'auth'] , function() {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    //users
     Route::resource('users', UserController::class);
+    Route::get('/users/{user}/profile' , [UserController::class, 'profile'])->name('users.profile');
+
+
     Route::resource('roles', RoleController::class);
     Route::resource('categories', CategoryController::class);
 

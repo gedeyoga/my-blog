@@ -40,6 +40,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $guard_name = 'sanctum';
+
     public function getAuthToken()
     {
         $token = $this->tokens->first();
